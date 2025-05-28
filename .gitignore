@@ -1,0 +1,32 @@
+# Ignore environment config files
+.env
+.env.local
+.env.*.local
+
+# Ignore Composer dependencies (if you use composer)
+vendor/
+
+# Ignore logs and cache
+logs/
+cache/
+tmp/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore node modules (if using Node.js tools for frontend)
+node_modules/
+
+# Ignore build/dist folders if you have front-end build process
+dist/
+build/
+
+# Ignore PHPStorm config files (if using PHPStorm)
+*.iml
