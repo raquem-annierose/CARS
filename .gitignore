@@ -30,3 +30,29 @@ build/
 
 # Ignore PHPStorm config files (if using PHPStorm)
 *.iml
+
+# Ignore actual DB connection file
+database/db.php
+
+# VS Code & system files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Optional: PHP dependencies
+vendor/
+.env
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore PHPStorm / VSCode
+.vscode/
+
+# Ignore XAMPP logs and temp files
+*.log
+*.tmp
+
+# Ignore environment file
+.env
