@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resident Dashboard</title>
+  <link rel="stylesheet" href="resident_dashboard-style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div>
+        <div class="logo">MyResidence</div>
+        <nav class="menu">
+          <a href="#" class="menu-item active">Dashboard</a>
+          <a href="#" class="menu-item">My Reservations</a>
+          <a href="#" class="menu-item">Payments</a>
+          <a href="#" class="menu-item">Profile</a>
+        </nav>
+      </div>
+      <a href="#" class="menu-item logout">Logout</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="header">
+        <h1>Welcome, [Resident Name]</h1>
+        <div class="profile">
+          <img src="profile.jpg" alt="Profile">
+          <span>Resident</span>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <h3>Upcoming Reservations</h3>
+          <p>[No data yet]</p>
+        </div>
+        <div class="card">
+          <h3>Payments Due</h3>
+          <p>[No data yet]</p>
+        </div>
+        <div class="card">
+          <h3>Notifications</h3>
+          <p>[No data yet]</p>
+        </div>
+      </div>
+
+      <section class="summary">
+        <h2>Recent Reservations</h2>
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>Amenity</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4" style="text-align:center; padding: 20px;">No reservations yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
