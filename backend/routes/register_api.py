@@ -11,7 +11,7 @@ register_bp = Blueprint('register', __name__, url_prefix='/api')
 @register_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    print("Received data:", data)  # Debug print
+    print("Received data:", data)  
 
     required_fields = ['username', 'email', 'password', 'first_name', 'last_name', 'unit_number', 'building']
     for field in required_fields:
