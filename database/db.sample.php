@@ -1,5 +1,5 @@
 <?php
-// database/db.example.php
+
 
 $host = 'localhost';
 $db   = 'cars_db';

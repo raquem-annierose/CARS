@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign Up - CARS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../public/css/signup-style.css" />
+</head>
+<body>
+  <header class="header-container">
+    <div class="logo-holder">
+      <a href="index.html">CARS</a>
+    </div>
+    <nav class="nav-buttons">
+      <a href="login.html" class="btn-login">Back to Login</a>
+    </nav>
+  </header>
+
+  <main class="signup-body-container">
+    <section class="signup-section">
+      <div class="signup-container">
+        <h2>Sign Up for CARS</h2>
+        <form id="signupForm" autocomplete="off" spellcheck="false" novalidate>
+          <div class="input-group">
+            <input type="text" name="username" placeholder="Username" required />
+          </div>
+          <div class="input-group">
+            <input type="email" name="email" placeholder="Email" required />
+          </div>
+          <div class="input-group">
+            <input type="password" name="password" placeholder="Password" required />
+          </div>
+          <div class="input-group">
+            <input type="text" name="first_name" placeholder="First Name" required />
+          </div>
+          <div class="input-group">
+            <input type="text" name="last_name" placeholder="Last Name" required />
+          </div>
+          <div class="input-group">
+            <input type="text" name="middle_name" placeholder="Middle Name (optional)" />
+          </div>
+          <div class="input-group">
+            <input type="text" name="unit_number" placeholder="Unit Number" required />
+          </div>
+          <div class="input-group">
+            <input type="text" name="building" placeholder="Building" required />
+          </div>
+          <div class="input-group">
+            <input type="tel" name="contact_number" placeholder="Contact Number (optional)" />
+          </div>
+          <button type="submit" class="btn-primary">Sign Up</button>
+          <p class="signup-text">
+            Already have an account? <a href="login.html">Log in</a>
+          </p>
+          <div id="signupMessage" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer-container">
+    <p>© 2025 CARS. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const messageBox = document.getElementById('signupMessage');
+      messageBox.textContent = '';  // clear previous messages
+
+      const formData = new FormData(this);
+
+      try {
+        const response = await fetch('../backend/signup.php', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not OK');
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+          messageBox.textContent = result.success;
+          messageBox.style.color = '#4ade80'; // green
+        } else {
+          messageBox.textContent = result.error || 'Something went wrong.';
+          messageBox.style.color = '#f87171'; // red
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        messageBox.textContent = 'Failed to submit form. Please try again later.';
+        messageBox.style.color = '#f87171'; // red
+      }
+    });
+  </script>
+</body>
+</html>
