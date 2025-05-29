@@ -4,25 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard</title>
-
   <link rel="stylesheet" href="/CARS/public/css/admin_dashboard-style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+
   <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="logo">CARS</div>
+    <nav class="menu">
+      <a href="#" class="menu-item active">Dashboard</a>
+      <a href="#users" class="menu-item">User Accounts</a>
+      <a href="#admins" class="menu-item">Admin Accounts</a>
+      <a href="#settings" class="menu-item">Settings</a>
+      <a href="/CARS/index.html" class="menu-item logout">Logout</a>
+</aside>
 
-   
-    <header class="header-container">
-      <div class="logo-holder">
-        <a href="#">CARS</a>
-      </div>
-      <nav class="nav-buttons">
-        <a href="/CARS/views/login.html" class="btn-logout">Logout</a>
-      </nav>
-    </header>
 
-    
+    <!-- Main Content Panel -->
     <main class="main-content">
-      <section id="users">
+      <section id="users" class="custom-section">
         <h2>User Accounts</h2>
         <div class="button-group">
           <button>Add User</button>
@@ -30,7 +33,7 @@
         </div>
       </section>
 
-      <section id="admins">
+      <section id="admins" class="custom-section">
         <h2>Admin Accounts</h2>
         <form action="/create_admin" method="POST">
           <label for="username">Username:</label>
@@ -46,7 +49,7 @@
         </form>
       </section>
 
-      <section id="settings">
+      <section id="settings" class="custom-section">
         <h2>Settings</h2>
         <div class="button-group">
           <button>System Preferences</button>
@@ -54,12 +57,8 @@
         </div>
       </section>
     </main>
-
-   
-    <footer class="footer-container">
-      <p>&copy; 2025 CARS Admin Panel. All rights reserved.</p>
-    </footer>
-
   </div>
+
+  
 </body>
 </html>
