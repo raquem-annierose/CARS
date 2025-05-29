@@ -1,58 +1,45 @@
-# Ignore environment config files
+# Python virtual environment
+venv/
+.venv/
+
+# Python environment files
 .env
-.env.local
-.env.*.local
+.env.*
 
-# Ignore Composer dependencies (if you use composer)
-vendor/
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*$py.class
 
-# Ignore logs and cache
+# Logs and temporary files
+*.log
+*.tmp
 logs/
 cache/
 tmp/
 
-# Ignore OS files
-.DS_Store
-Thumbs.db
-
-# Ignore IDE files
+# IDE/editor config files
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
+*.iml
 
-# Ignore node modules (if using Node.js tools for frontend)
+# System/OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (if using frontend tools)
 node_modules/
 
-# Ignore build/dist folders if you have front-end build process
+# Frontend build artifacts
 dist/
 build/
 
-# Ignore PHPStorm config files (if using PHPStorm)
-*.iml
+# Remove old PHP-specific files if not used anymore
+# vendor/           ← Only keep this if using PHP Composer (otherwise remove)
+# database/db.php   ← Remove if you fully migrated to Python
 
-# Ignore actual DB connection file
-database/db.php
-
-# VS Code & system files
-.vscode/
-.DS_Store
-Thumbs.db
-
-# Optional: PHP dependencies
-vendor/
-.env
-
-# Ignore system files
-.DS_Store
-Thumbs.db
-
-# Ignore PHPStorm / VSCode
-.vscode/
-
-# Ignore XAMPP logs and temp files
-*.log
-*.tmp
-
-# Ignore environment file
-.env
+# XAMPP files (only if relevant — otherwise remove)
+# *.log
+# *.tmp

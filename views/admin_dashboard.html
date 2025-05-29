@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/admin_dashboard-style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>Admin Dashboard</h1>
+            <nav>
+                <ul>
+                    <li><a href="#users">User Management</a></li>
+                    <li><a href="#admins">Admin Management</a></li>
+                    <li><a href="#settings">Settings</a></li>
+                    <li><a href="#logout">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section id="users">
+                <h2>User Accounts</h2>
+                <!-- Placeholder for user account management -->
+                <button>Add User</button>
+                <button>View All Users</button>
+            </section>
+
+            <section id="admins">
+                <h2>Admin Accounts</h2>
+                <form action="/create_admin" method="POST">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <button type="submit">Create Admin</button>
+                </form>
+            </section>
+
+            <section id="settings">
+                <h2>Settings</h2>
+                <!-- Add settings options here -->
+                <button>System Preferences</button>
+                <button>Audit Logs</button>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Admin Panel. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

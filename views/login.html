@@ -12,7 +12,7 @@
       <a href="index.html">CARS</a>
     </div>
     <nav class="nav-buttons">
-      <a href="index.html" class="btn-login">Home</a>
+      <a href="/CARS/index.html" class="btn-login">Home</a>
     </nav>
   </header>
 
@@ -66,13 +66,20 @@
 
     document.getElementById('loginForm').addEventListener('submit', async function (e) {
       e.preventDefault();
-      const formData = new FormData(this);
       const messageDiv = document.getElementById('loginMessage');
 
+      const formData = {
+        username_or_email: this.username_or_email.value,
+        password: this.password.value
+      };
+
       try {
-        const response = await fetch('../backend/login.php', {
+        const response = await fetch('http://localhost:5000/api/login', {
           method: 'POST',
-          body: formData
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
         });
 
         const result = await response.json();

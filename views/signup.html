@@ -64,38 +64,106 @@
 
   <script>
     document.getElementById('signupForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
+  e.preventDefault();
 
-      const messageBox = document.getElementById('signupMessage');
-      messageBox.textContent = '';  // clear previous messages
+  const messageBox = document.getElementById('signupMessage');
+  messageBox.textContent = '';  // clear previous messages
 
-      const formData = new FormData(this);
+  const username = this.username.value.trim();
+  const email = this.email.value.trim();
+  const password = this.password.value;
+  const first_name = this.first_name.value.trim();
+  const last_name = this.last_name.value.trim();
+  const middle_name = this.middle_name.value.trim() || null;
+  const unit_number = this.unit_number.value.trim();
+  const building = this.building.value.trim();
+  const contact_number = this.contact_number.value.trim() || '';
 
-      try {
-        const response = await fetch('../backend/signup.php', {
-          method: 'POST',
-          body: formData,
-        });
+  // Simple client-side validation examples:
+  if (username.length !== 8) {
+    messageBox.textContent = "Username must be exactly 8 characters.";
+    messageBox.style.color = '#f87171';
+    return;
+  }
 
-        if (!response.ok) {
-          throw new Error('Network response was not OK');
-        }
+  const emailRegex = /^\S+@\S+\.\S+$/;
+  if (!emailRegex.test(email)) {
+    messageBox.textContent = "Invalid email format.";
+    messageBox.style.color = '#f87171';
+    return;
+  }
 
-        const result = await response.json();
+  if (password.length < 8 || !(/[a-zA-Z]/.test(password) && /\d/.test(password))) {
+    messageBox.textContent = "Password must be at least 8 characters and contain letters and numbers.";
+    messageBox.style.color = '#f87171';
+    return;
+  }
 
-        if (result.success) {
-          messageBox.textContent = result.success;
-          messageBox.style.color = '#4ade80'; // green
-        } else {
-          messageBox.textContent = result.error || 'Something went wrong.';
-          messageBox.style.color = '#f87171'; // red
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        messageBox.textContent = 'Failed to submit form. Please try again later.';
-        messageBox.style.color = '#f87171'; // red
-      }
+  if (!first_name.match(/^[A-Za-z\s]+$/)) {
+    messageBox.textContent = "First name must contain only letters and spaces.";
+    messageBox.style.color = '#f87171';
+    return;
+  }
+
+  if (!last_name.match(/^[A-Za-z\s]+$/)) {
+    messageBox.textContent = "Last name must contain only letters and spaces.";
+    messageBox.style.color = '#f87171';
+    return;
+  }
+
+  if (!unit_number) {
+    messageBox.textContent = "Unit number is required.";
+    messageBox.style.color = '#f87171';
+    return;
+  }
+
+  if (!building) {
+    messageBox.textContent = "Building is required.";
+    messageBox.style.color = '#f87171';
+    return;
+  }
+
+  // If all client-side checks pass, send to backend:
+  const formData = {
+    username,
+    email,
+    password,
+    first_name,
+    last_name,
+    middle_name,
+    unit_number,
+    building,
+    contact_number
+  };
+
+  try {
+    const response = await fetch('http://127.0.0.1:5000/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
     });
+
+    if (!response.ok) {
+      throw new Error('Network response was not OK');
+    }
+
+    const result = await response.json();
+
+    if (result.success) {
+      messageBox.textContent = result.success;
+      messageBox.style.color = '#4ade80'; // green
+      this.reset();
+    } else {
+      messageBox.textContent = result.error || 'Something went wrong.';
+      messageBox.style.color = '#f87171'; // red
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    messageBox.textContent = 'Failed to submit form. Please try again later.';
+    messageBox.style.color = '#f87171'; // red
+  }
+});
+
   </script>
 </body>
 </html>
