@@ -1,60 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../css/admin_dashboard-style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <!-- ✅ Correct path for XAMPP hosted project -->
+  <link rel="stylesheet" href="/CARS/public/css/admin_dashboard-style.css" />
 </head>
 <body>
-    <div class="dashboard-container">
-        <header>
-            <h1>Admin Dashboard</h1>
-            <nav>
-                <ul>
-                    <li><a href="#users">User Management</a></li>
-                    <li><a href="#admins">Admin Management</a></li>
-                    <li><a href="#settings">Settings</a></li>
-                    <li><a href="#logout">Logout</a></li>
-                </ul>
-            </nav>
-        </header>
+  <div class="dashboard-container">
 
-        <main>
-            <section id="users">
-                <h2>User Accounts</h2>
-                <!-- Placeholder for user account management -->
-                <button>Add User</button>
-                <button>View All Users</button>
-            </section>
+    <!-- ✅ HEADER -->
+    <header class="header-container">
+      <div class="logo-holder">
+        <a href="#">CARS</a>
+      </div>
+      <nav class="nav-buttons">
+        <a href="/CARS/views/login.html" class="btn-login">Login</a>
+      </nav>
+    </header>
 
-            <section id="admins">
-                <h2>Admin Accounts</h2>
-                <form action="/create_admin" method="POST">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
+    <!-- ✅ MAIN CONTENT -->
+    <main class="main-content">
+      <section id="users">
+        <h2>User Accounts</h2>
+        <div class="button-group">
+          <button>Add User</button>
+          <button>View All Users</button>
+        </div>
+      </section>
 
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
+      <section id="admins">
+        <h2>Admin Accounts</h2>
+        <form action="/create_admin" method="POST">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required>
 
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
 
-                    <button type="submit">Create Admin</button>
-                </form>
-            </section>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required>
 
-            <section id="settings">
-                <h2>Settings</h2>
-                <!-- Add settings options here -->
-                <button>System Preferences</button>
-                <button>Audit Logs</button>
-            </section>
-        </main>
+          <button type="submit">Create Admin</button>
+        </form>
+      </section>
 
-        <footer>
-            <p>&copy; 2025 Admin Panel. All rights reserved.</p>
-        </footer>
-    </div>
+      <section id="settings">
+        <h2>Settings</h2>
+        <div class="button-group">
+          <button>System Preferences</button>
+          <button>Audit Logs</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- ✅ FOOTER -->
+    <footer class="footer-container">
+      <p>&copy; 2025 CARS Admin Panel. All rights reserved.</p>
+    </footer>
+
+  </div>
 </body>
 </html>
