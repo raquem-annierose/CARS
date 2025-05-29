@@ -80,10 +80,11 @@
   const contact_number = this.contact_number.value.trim() || '';
 
   // Simple client-side validation examples:
-  if (username.length !== 8) {
-    messageBox.textContent = "Username must be exactly 8 characters.";
-    messageBox.style.color = '#f87171';
-    return;
+  const usernameRegex = /^[A-Za-z0-9_.]{4,20}$/;
+  if (!usernameRegex.test(username)) {
+  messageBox.textContent = "Username must be 4-20 characters long and alphanumeric.";
+  messageBox.style.color = '#f87171';
+  return;
   }
 
   const emailRegex = /^\S+@\S+\.\S+$/;
