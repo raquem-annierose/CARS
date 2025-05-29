@@ -1,9 +1,9 @@
 console.log("Script loaded!");
 
 const images = [
-  'public/resources/banner/1.jpg',
-  'public/resources/banner/2.jpg',
-  'public/resources/banner/3.jpg'
+  'static/resources/banner/1.jpg',
+  'static/resources/banner/2.jpg',
+  'static/resources/banner/3.jpg'
 ];
 
 let currentIndex = 0;
