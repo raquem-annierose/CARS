@@ -1,3 +1,14 @@
+.logged-in-user {
+  background-color: rgba(10, 167, 23, 0.15);
+  color: rgb(10, 167, 23);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
 /* SIDEBAR */
 .sidebar {
   width: 240px;

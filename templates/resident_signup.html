@@ -9,10 +9,10 @@
 <body>
   <header class="header-container">
     <div class="logo-holder">
-      <a href="/CARS/index.html">CARS</a>
+      <a href="/">CARS</a>
     </div>
     <nav class="nav-buttons">
-      <a href="login.html" class="btn-login">Back to Login</a>
+      <a href="/login" class="btn-login">Back to Login</a>
     </nav>
   </header>
 
@@ -50,7 +50,7 @@
           </div>
           <button type="submit" class="btn-primary">Sign Up</button>
           <p class="signup-text">
-            Already have an account? <a href="login.html">Log in</a>
+            Already have an account? <a href="/login">Log in</a>
           </p>
           <div id="signupMessage" aria-live="polite"></div>
         </form>
@@ -138,7 +138,7 @@
   };
 
   try {
-    const response = await fetch('http://127.0.0.1:5000/api/register', {
+    const response = await fetch('http://127.0.0.1:5000/api/register/resident', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
