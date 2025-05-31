@@ -1,7 +1,6 @@
-from flask import Blueprint, request, jsonify, session, render_template
+from flask import Blueprint, request, jsonify, session, render_template, redirect, url_for, current_app
 import bcrypt
 from database.db import get_db_connection
-from flask import redirect, url_for
 
 login_bp = Blueprint('login', __name__, url_prefix='/api')
 
@@ -61,4 +60,51 @@ def get_session():
 def logout():
     session.clear()
     return jsonify({'success': 'Logged out successfully.'})
+
+@login_bp.route('/login/google')
+def login_google():
+    google = current_app.google
+    redirect_uri = url_for('login.auth_google_callback', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@login_bp.route('/auth/google/callback')
+def auth_google_callback():
+    google = current_app.google
+    token = google.authorize_access_token()
+    resp = google.get('userinfo')
+    user_info = resp.json()
+    email = user_info['email']
+    name = user_info.get('name', '')
+    sub = user_info.get('sub')
+
+    # Check if user exists, else create
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Users WHERE email = %s", (email,))
+    user = cursor.fetchone()
+    if not user:
+        # Create new user with Google info
+        cursor.execute(
+            "INSERT INTO Users (username, email, password_hash, role) VALUES (%s, %s, %s, 'resident')",
+            (sub, email, '')
+        )
+        user_id = cursor.lastrowid
+        cursor.execute(
+            "INSERT INTO Resident (user_id, last_name, first_name, middle_name, unit_number, building, contact_number) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            (user_id, '', name, '', '', '', '')
+        )
+        conn.commit()
+        cursor.execute("SELECT * FROM Users WHERE user_id = %s", (user_id,))
+        user = cursor.fetchone()
+    # Set session
+    session['user_id'] = user['user_id']
+    session['role'] = user['role']
+    session['username'] = user['username']
+    cursor.close()
+    conn.close()
+    # Redirect to dashboard
+    if user['role'] == 'admin':
+        return redirect('/admin_dashboard')
+    else:
+        return redirect('/resident_dashboard')
 

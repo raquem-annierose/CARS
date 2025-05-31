@@ -8,17 +8,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Header -->
+  <header class="header-container">
+    <!-- Empty header (styled via admin_dashboard-style.css) -->
+  </header>
 
-   <div class="dashboard-container">
+  <div class="dashboard-container">
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-top">
         <div class="logo">CARS</div>
-        <div id="loggedInUser" class="logged-in-user"></div><!-- To show username -->
+        <div id="loggedInUser" class="logged-in-user"></div>
         <nav class="menu">
           <a href="#" class="menu-item active">Dashboard</a>
-          <a href="#users" class="menu-item">User Accounts</a>
+          <a href="#residents" class="menu-item">Resident Accounts</a>
           <a href="#admins" class="menu-item">Admin Accounts</a>
+          <a href="#reservations" class="menu-item">Reservations</a>
+          <a href="#payments" class="menu-item">Payments</a>
+          <a href="#reports" class="menu-item">Reports</a>
           <a href="#settings" class="menu-item">Settings</a>
           <a href="#" id="logoutBtn" class="menu-item logout">Logout</a>
         </nav>
@@ -28,36 +35,112 @@
 
     <!-- Main Content Panel -->
     <main class="main-content">
-      <section id="users" class="custom-section">
-        <h2>User Accounts</h2>
-        <div class="button-group">
-          <button>Add User</button>
-          <button>View All Users</button>
+      <h2 id="main-title" style="display:none;"></h2>
+      <section id="dashboard-section" class="panel-section">
+        <div class="dashboard-cards">
+          <div class="dashboard-card">
+            <div class="card-icon">📊</div>
+            <div class="card-title">Total Reservations Today</div>
+            <div class="card-value" id="reservations-today">--</div>
+          </div>
+          <div class="dashboard-card">
+            <div class="card-icon">🧑‍💼</div>
+            <div class="card-title">Active Residents</div>
+            <div class="card-value" id="active-residents">--</div>
+          </div>
+          <div class="dashboard-card">
+            <div class="card-icon">🛠️</div>
+            <div class="card-title">Pending Amenity Approvals</div>
+            <div class="card-value" id="pending-amenities">--</div>
+          </div>
+          <div class="dashboard-card">
+            <div class="card-icon">💸</div>
+            <div class="card-title">Payments Today / Month</div>
+            <div class="card-value" id="payments-today">-- / --</div>
+          </div>
+          <div class="dashboard-card">
+            <div class="card-icon">🔐</div>
+            <div class="card-title">Total Admins</div>
+            <div class="card-value" id="total-admins">--</div>
+          </div>
         </div>
       </section>
-
-      <section id="admins" class="custom-section">
-        <h2>Admin Accounts</h2>
-        <form action="/create_admin" method="POST">
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" required>
-
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required>
-
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required>
-
-          <button type="submit">Create Admin</button>
-        </form>
+      <section id="residents-section" class="panel-section" style="display:none;">
+        <h2>Resident Management</h2>
+        <ul>
+          <li>View all residents</li>
+          <li>Search by unit/building</li>
+          <li>Add/edit resident info</li>
+          <li>Deactivate resident account (optional soft-delete)</li>
+        </ul>
       </section>
-
-      <section id="settings" class="custom-section">
-        <h2>Settings</h2>
-        <div class="button-group">
-          <button>System Preferences</button>
-          <button>Audit Logs</button>
-        </div>
+      <section id="admins-section" class="panel-section" style="display:none;">
+        <h2>Admin Management</h2>
+        <ul>
+          <li>View list of all admins</li>
+          <li>Create new admin account (username, email, password, name, created_by = current user_id)</li>
+          <li>Deactivate admin (soft delete or restrict access)</li>
+          <li>View who created which admin (use created_by)</li>
+        </ul>
+      </section>
+      <section id="reservations-section" class="panel-section" style="display:none;">
+        <h2>Reservation Management</h2>
+        <ul>
+          <li><b>Amenity Reservations</b>
+            <ul>
+              <li>View reservation requests</li>
+              <li>Approve / Decline reservations</li>
+              <li>Assign security personnel</li>
+              <li>Filter by date, resident, amenity</li>
+            </ul>
+          </li>
+          <li><b>Function Area Reservations</b>
+            <ul>
+              <li>View event reservations (pavilion, clubhouse, etc.)</li>
+              <li>View sponsored outsiders / caterer details</li>
+            </ul>
+          </li>
+          <li><b>Swimming Pool Permits</b>
+            <ul>
+              <li>Approve / edit permit</li>
+              <li>Input charges, notes, etc.</li>
+            </ul>
+          </li>
+          <li><b>Basketball Court Reservations</b>
+            <ul>
+              <li>Approve, view conforme status</li>
+              <li>Set rates or edit reservations</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+      <section id="payments-section" class="panel-section" style="display:none;">
+        <h2>Payments</h2>
+        <ul>
+          <li>View all payments</li>
+          <li>Filter by status (pending, fully paid, etc.)</li>
+          <li>Add manual payment (e.g., walk-in cash)</li>
+          <li>View receipts / OR numbers</li>
+        </ul>
+      </section>
+      <section id="reports-section" class="panel-section" style="display:none;">
+        <h2>Reports & Logs</h2>
+        <ul>
+          <li>Generate monthly reports</li>
+          <li>Amenities usage</li>
+          <li>Pool/basketball reservations</li>
+          <li>Payment summaries</li>
+          <li>Export PDF/CSV</li>
+          <li>View admin activity logs (e.g., who approved what)</li>
+        </ul>
+      </section>
+      <section id="settings-section" class="panel-section" style="display:none;">
+        <h2>Account Settings</h2>
+        <ul>
+          <li>Update personal admin profile</li>
+          <li>Change password</li>
+          <li>Upload/change profile image</li>
+        </ul>
       </section>
     </main>
   </div>
@@ -65,16 +148,42 @@
   
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-  fetch('/api/session', { credentials: 'include' })
-    .then(res => res.json())
-    .then(data => {
-      console.log("Session data:", data); // DEBUG LINE
+    fetch('/api/session', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Session data:", data); 
 
-      if (data.logged_in) {
-        document.getElementById('loggedInUser').textContent = `Logged in as: ${data.username}`;
-      } else {
-        document.getElementById('loggedInUser').textContent = 'Not logged in';
-      }
+        if (data.logged_in) {
+          document.getElementById('loggedInUser').textContent = `Logged in as: ${data.username}`;
+        } else {
+          document.getElementById('loggedInUser').textContent = 'Not logged in';
+        }
+      });
+
+    // Sidebar menu click handler for dynamic title and section display
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        if (this.classList.contains('logout')) return; // skip logout
+        e.preventDefault();
+        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+        let title = this.textContent.trim();
+        document.getElementById('main-title').textContent = title;
+        document.getElementById('main-title').style.display = (title === 'Dashboard') ? 'none' : 'block';
+
+        // Hide all sections and show the selected one
+        document.querySelectorAll('.panel-section').forEach(section => {
+          section.style.display = 'none';
+        });
+        let sectionId = this.getAttribute('href');
+        if (sectionId && sectionId !== '#' && sectionId !== null) {
+          sectionId = sectionId.replace('#', '') + '-section';
+          let section = document.getElementById(sectionId);
+          if (section) section.style.display = 'block';
+        } else {
+          document.getElementById('dashboard-section').style.display = 'block';
+        }
+      });
     });
 
     // Logout handler
@@ -97,5 +206,7 @@
     });
   });
 </script>
+<script src="/static/js/admin_dashboard.js"></script>
 </body>
+</html>
 

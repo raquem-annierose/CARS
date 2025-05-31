@@ -20,6 +20,5 @@ app.register_blueprint(register_bp)
 app.register_blueprint(index_bp)
 app.register_blueprint(resident_bp)
 
-
 if __name__ == '__main__':
     app.run(debug=True)

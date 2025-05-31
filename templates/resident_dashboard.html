@@ -17,6 +17,7 @@
     <aside class="sidebar">
       <div>
         <div class="logo">MyResidence</div>
+        <div id="loggedInUser" class="logged-in-user"></div>
         <nav class="menu">
           <a href="#" class="menu-item active">Dashboard</a>
           <a href="#" class="menu-item">My Reservations</a>
@@ -40,23 +41,36 @@
 
   
   <script>
-    // Logout handler
-    document.getElementById('logoutBtn').addEventListener('click', function (e) {
-      e.preventDefault();
-      if (confirm('Are you sure you want to logout?')) {
-        fetch('/api/logout', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
+    // Fetch and display logged-in username
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/api/session', { credentials: 'include' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.logged_in) {
+            document.getElementById('loggedInUser').textContent = `Logged in as: ${data.username}`;
+          } else {
+            document.getElementById('loggedInUser').textContent = 'Not logged in';
           }
-        }).then(res => res.json())
-          .then(data => {
-            if (data.success) {
-              window.location.href = '/';
+        });
+
+      // Logout handler
+      document.getElementById('logoutBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        if (confirm('Are you sure you want to logout?')) {
+          fetch('/api/logout', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
             }
-          });
-      }
+          }).then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                window.location.href = '/';
+              }
+            });
+        }
+      });
     });
   </script>
 </body>
