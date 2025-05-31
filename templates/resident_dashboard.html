@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Resident Dashboard</title>
-  <link rel="stylesheet" href="/CARS/static/css/resident_dashboard-style.css">
+  <link rel="stylesheet" href="static/css/resident_dashboard-style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -24,7 +24,7 @@
           <a href="#" class="menu-item">Profile</a>
         </nav>
       </div>
-      <a href="#" class="menu-item logout">Logout</a>
+      <a href="#" class="menu-item logout" id="logoutBtn">Logout</a>
     </aside>
 
     <!-- Main Content Panel -->
@@ -37,5 +37,27 @@
   <footer class="footer-container">
     <!-- Empty footer (styled via admin_dashboard-style.css) -->
   </footer>
+
+  
+  <script>
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (confirm('Are you sure you want to logout?')) {
+        fetch('/api/logout', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              window.location.href = '/';
+            }
+          });
+      }
+    });
+  </script>
 </body>
 </html>

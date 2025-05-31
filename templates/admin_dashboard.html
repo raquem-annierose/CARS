@@ -4,23 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="/CARS/static/css/admin_dashboard-style.css" />
+  <link rel="stylesheet" href="/static/css/admin_dashboard-style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="dashboard-container">
+   <div class="dashboard-container">
     <!-- Sidebar -->
     <aside class="sidebar">
-  <div class="sidebar-top">
-    <div class="logo">CARS</div>
-    <nav class="menu">
-      <a href="#" class="menu-item active">Dashboard</a>
-      <a href="#users" class="menu-item">User Accounts</a>
-      <a href="#admins" class="menu-item">Admin Accounts</a>
-      <a href="#settings" class="menu-item">Settings</a>
-      <a href="/CARS/index.html" class="menu-item logout">Logout</a>
-</aside>
+      <div class="sidebar-top">
+        <div class="logo">CARS</div>
+        <div id="loggedInUser" class="logged-in-user"></div><!-- To show username -->
+        <nav class="menu">
+          <a href="#" class="menu-item active">Dashboard</a>
+          <a href="#users" class="menu-item">User Accounts</a>
+          <a href="#admins" class="menu-item">Admin Accounts</a>
+          <a href="#settings" class="menu-item">Settings</a>
+          <a href="#" id="logoutBtn" class="menu-item logout">Logout</a>
+        </nav>
+      </div>
+    </aside>
 
 
     <!-- Main Content Panel -->
@@ -60,5 +63,39 @@
   </div>
 
   
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  fetch('/api/session', { credentials: 'include' })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Session data:", data); // DEBUG LINE
+
+      if (data.logged_in) {
+        document.getElementById('loggedInUser').textContent = `Logged in as: ${data.username}`;
+      } else {
+        document.getElementById('loggedInUser').textContent = 'Not logged in';
+      }
+    });
+
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (confirm('Are you sure you want to logout?')) {
+        fetch('/api/logout', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              window.location.href = '/';
+            }
+          });
+      }
+    });
+  });
+</script>
 </body>
-</html>
+
