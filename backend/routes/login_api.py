@@ -14,15 +14,20 @@ def login():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM Users WHERE username = %s OR email = %s", 
-                       (username_or_email, username_or_email))
+        cursor.execute(
+            "SELECT * FROM Users WHERE username = %s OR email = %s",
+            (username_or_email, username_or_email)
+        )
         user = cursor.fetchone()
 
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
+        if user and bcrypt.checkpw(
+            password.encode('utf-8'),
+            user['password_hash'].encode('utf-8')
+        ):
             # Set session data
             session['user_id'] = user['user_id']
             session['role'] = user['role']
-            session['username'] = user['username']  # Optional: for frontend display
+            session['username'] = user['username'] 
 
             return jsonify({
                 'success': True,
@@ -41,7 +46,7 @@ def login():
 
 @login_bp.route('/session', methods=['GET'])
 def get_session():
-    print("SESSION DEBUG:", dict(session))  # <-- Add this
+    print("SESSION DEBUG:", dict(session))
     if 'user_id' in session:
         return jsonify({
             'logged_in': True,
@@ -51,7 +56,7 @@ def get_session():
         })
     else:
         return jsonify({'logged_in': False})
-    
+
 @login_bp.route('/logout', methods=['POST'])
 def logout():
     session.clear()

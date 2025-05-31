@@ -3,9 +3,8 @@ from flask import Blueprint, request, render_template, session, redirect
 index_bp = Blueprint('index', __name__, url_prefix='/')
 
 @index_bp.route('/', methods=['GET'])
-
 def index():
-    return render_template('landing_page.html')
+    return render_template('index.html')
 
 @index_bp.route('/login', methods=['GET'])
 def login():
