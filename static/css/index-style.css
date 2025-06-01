@@ -925,7 +925,7 @@ body.dark .modern-nav .theme-toggle {
   .image-section.curve-section img#rotating-image {
     max-width: 99vw;
     height: 30vw;
-    min-height: 2000px;
+    min-height: 200px;
   }
 }
 #login-modal {
