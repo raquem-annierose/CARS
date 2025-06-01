@@ -1,12 +1,76 @@
-.logged-in-user {
-  background-color: rgba(10, 167, 23, 0.15);
-  color: rgb(10, 167, 23);
-  font-weight: 600;
-  font-size: 14px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  margin-bottom: 15px;
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+  gap: 8px;
+}
+.profile-avatar {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e9f1fb;
+  box-shadow: 0 2px 8px rgba(30,60,114,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.profile-upload-btn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(30,60,114,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, box-shadow 0.2s;
+  z-index: 2;
+}
+.profile-upload-btn:focus, .profile-upload-btn:hover {
+  background: #4F8EF7;
+  color: #fff;
+  outline: none;
+  box-shadow: 0 2px 8px #4F8EF7;
+}
+.profile-info {
+  text-align: center;
+}
+.profile-username {
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.18rem;
+  margin: 10px 0 2px 0;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(20,32,48,0.18);
+}
+.profile-view-link {
+  color: #4F8EF7;
+  font-size: 0.98rem;
+  text-decoration: none;
+  margin-top: 2px;
   display: inline-block;
+}
+.profile-view-link:hover {
+  text-decoration: underline;
+}
+.profile-links-row, .profile-settings-icon {
+  display: none;
 }
 
 /* SIDEBAR */
@@ -17,12 +81,13 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   position: fixed;
   left: 0;
   top: 0;
   padding: 30px 20px;
   box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+  overflow-y: auto;
 }
 
 .sidebar-top {
@@ -67,23 +132,38 @@
   margin-top: 20px;
   color: #ff6b6b;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.08rem;
+  border-radius: 8px;
+  padding-left: 12px;
+  transition: background 0.18s, color 0.18s;
 }
 
-.menu-item.logout:hover {
-  color: #ff8787;
+.menu-item.logout .logout-icon {
+  font-size: 1.25rem;
+  margin-right: 2px;
+  display: inline-block;
 }
 
+.menu-item.logout:hover, .menu-item.logout:focus {
+  background: #ff6b6b;
+  color: #fff;
+}
 
 /* MAIN PANEL */
 .dashboard-container {
   display: flex;
+  min-height: 100vh;
 }
 
 .main-content {
   margin-left: 240px;
   padding: 40px;
   flex-grow: 1;
+  min-width: 0;
 }
 
 .header-container {
@@ -97,6 +177,29 @@
   margin-left: 240px;
 }
 
+/* DASHBOARD HEADER ROW */
+.dashboard-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e2a38;
+  letter-spacing: 0.5px;
+}
+.dashboard-date {
+  font-size: 1.1rem;
+  color: #6c7a89;
+  font-weight: 500;
+  background: #f3f6fa;
+  padding: 8px 18px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(30,60,114,0.04);
+}
+
 /* DASHBOARD CARDS */
 .dashboard-cards {
   display: flex;
@@ -104,12 +207,11 @@
   gap: 32px;
   margin-bottom: 32px;
 }
-
 .dashboard-card {
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #f8fafc 0%, #e9f1fb 100%);
+  color: #1e2a38;
   border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(30,60,114,0.12);
+  box-shadow: 0 4px 24px rgba(30,60,114,0.08);
   padding: 32px 28px 24px 28px;
   min-width: 220px;
   flex: 1 1 220px;
@@ -122,7 +224,7 @@
 }
 .dashboard-card:hover {
   transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 8px 32px rgba(30,60,114,0.18);
+  box-shadow: 0 8px 32px rgba(30,60,114,0.14);
 }
 .card-icon {
   font-size: 2.5rem;
@@ -142,7 +244,211 @@
   margin-bottom: 0;
 }
 
-/* Responsive for dashboard cards */
+/* DASHBOARD PIE CHART */
+.dashboard-piechart-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 48px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(30,60,114,0.08);
+  padding: 32px 40px;
+  margin-bottom: 32px;
+  min-width: 340px;
+  min-height: 340px;
+}
+
+#dashboardPieChart {
+  width: 340px;
+  height: 340px;
+  max-width: 100%;
+  background: transparent;
+}
+
+.piechart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 1rem;
+  color: #222b45;
+  font-weight: 500;
+}
+.legend-color {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* DASHBOARD GRAPHS */
+.dashboard-graphs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+.dashboard-graph-card, .dashboard-events-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(30,60,114,0.08);
+  padding: 24px 28px 18px 28px;
+  min-width: 340px;
+  flex: 1 1 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+.graph-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: #1e2a38;
+}
+#reservationsBarChart, #reservationsAmenityChart {
+  width: 420px;
+  height: 260px;
+  max-width: 100%;
+  background: transparent;
+}
+#reservationsBarGraph {
+  width: 520px;
+  height: 260px;
+  max-width: 100%;
+  background: transparent;
+}
+.latest-events-list {
+  width: 100%;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 1rem;
+  color: #1e2a38;
+}
+.event-placeholder {
+  color: #b0b8c9;
+  font-style: italic;
+}
+
+/* Profile Edit Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  overflow: auto;
+  background: rgba(20,32,48,0.32);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  margin: 60px auto;
+  padding: 32px 32px 24px 32px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 370px;
+  box-shadow: 0 8px 32px rgba(30,60,114,0.18);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.close {
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  font-size: 1.7rem;
+  color: #4F8EF7;
+  cursor: pointer;
+  font-weight: 700;
+}
+.modal-avatar-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.modal-avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 8px;
+  border: 2px solid #e9f1fb;
+}
+.modal-upload-btn {
+  background: #e9f1fb;
+  color: #1e2a38;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 16px;
+  font-size: 0.98rem;
+  cursor: pointer;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.modal-upload-btn:hover {
+  background: #4F8EF7;
+  color: #fff;
+}
+.modal-field {
+  width: 100%;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.modal-field label {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #1e2a38;
+}
+.modal-field input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #cfd8e3;
+  font-size: 1rem;
+  outline: none;
+}
+.modal-save-btn {
+  background: #4F8EF7;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+.modal-save-btn:hover {
+  background: #1e2a38;
+}
+.modal-msg {
+  color: #43D9A3;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .modal-content {
+    max-width: 98vw;
+    padding: 18px 4vw 18px 4vw;
+  }
+}
+
+/* Responsive for dashboard pie chart */
 @media (max-width: 900px) {
   .dashboard-cards {
     flex-direction: column;
@@ -151,5 +457,27 @@
   .dashboard-card {
     min-width: 0;
     width: 100%;
+  }
+  .dashboard-piechart-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 10px;
+    gap: 24px;
+  }
+  #dashboardPieChart {
+    width: 220px;
+    height: 220px;
+  }
+  .dashboard-graphs-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .dashboard-graph-card, .dashboard-events-card {
+    min-width: 0;
+    width: 100%;
+  }
+  #reservationsBarChart, #reservationsAmenityChart, #reservationsBarGraph {
+    width: 100%;
+    height: 220px;
   }
 }

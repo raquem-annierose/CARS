@@ -1,13 +1,14 @@
+<!-- About Us Page -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>CARS - Home</title>
+  <title>About Us - CARS</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="static/css/index-style.css" />
+  <link rel="stylesheet" href="../static/css/index-style.css" />
+  <link rel="stylesheet" href="../static/css/about-style.css" />
 </head>
 <body>
-
   <!-- HEADER -->
   <header class="header-container modern-header">
     <div class="logo-holder">
@@ -15,7 +16,7 @@
     </div>
     <nav class="nav-buttons modern-nav">
       <a href="/" class="header-nav-link nav-curve-link" id="nav-home">Home</a>
-      <a href="/about" class="header-nav-link nav-curve-link" id="nav-about">About Us</a>
+      <a href="/about" class="header-nav-link nav-curve-link active" id="nav-about">About Us</a>
       <a href="/contact" class="header-nav-link nav-curve-link" id="nav-contact">Contact</a>
       <form class="header-search-form" action="#" method="get">
         <input type="text" name="search" placeholder="Search..." class="header-search-input" />
@@ -26,7 +27,6 @@
       <button id="toggle-theme" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
     </nav>
   </header>
-
   <!-- LOGIN MODAL -->
   <div id="login-modal-overlay" class="modal-overlay"></div>
   <div id="login-modal" class="modal-login">
@@ -129,159 +129,30 @@
       <div id="signupMessage" aria-live="polite"></div>
     </div>
   </div>
-
-  <!-- About Us Modal -->
-  <div id="about-modal-overlay" class="modal-overlay"></div>
-  <div id="about-modal" class="modal-login">
-    <div class="modal-content">
-      <button id="close-about-modal" class="close-modal" aria-label="Close about modal">&times;</button>
-      <h2>About Us</h2>
-      <p style="margin-bottom: 1em;">
-        <strong>Convenient Amenity Reservation System (CARS)</strong> is designed to make booking condo amenities easy and accessible for all residents. Our mission is to provide a seamless, modern, and reliable platform for managing shared spaces, ensuring everyone enjoys a hassle-free experience.
-      </p>
-      <ul style="margin-bottom: 1em;">
+  <div class="about-main-flex">
+    <div class="about-image-container">
+      <img src="../static/resources/banner/2.jpg" alt="About CARS" class="about-main-image" />
+    </div>
+    <div class="about-container">
+      <h1>About Us</h1>
+      <p><strong>Convenient Amenity Reservation System (CARS)</strong> is designed to make booking condo amenities easy and accessible for all residents. Our mission is to provide a seamless, modern, and reliable platform for managing shared spaces, ensuring everyone enjoys a hassle-free experience.</p>
+      <ul>
         <li>Real-time amenity availability</li>
         <li>Easy online reservations</li>
         <li>Secure and user-friendly interface</li>
         <li>Responsive support for residents</li>
       </ul>
-      <p>
-        CARS is managed by your condominium's admin team. For questions or suggestions, please contact us through the provided channels.
-      </p>
+      <p>CARS is managed by your condominium's admin team. For questions or suggestions, please contact us through the provided channels.</p>
     </div>
   </div>
-
-  
-  <!-- MAIN -->
-  <main class="body-container">
-    <div class="content-wrapper">
-
-      <!-- SECTION 1: Rotating Image with curve -->
-      <section class="image-section curve-section">
-        <div class="image-holder">
-          <img src="static/resources/banner/1.jpg" alt="Condo Image" id="rotating-image" />
-        </div>
-        <svg class="curve-svg" viewBox="0 0 1440 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,80 C400,180 1040,0 1440,100 L1440,180 L0,180 Z" fill="var(--header-bg)"/>
-        </svg>
-      </section>
-
-      <!-- SECTION 2: Description / Info -->
-      <section class="description-holder" id="info-section">
-        <h1>Welcome to CARS</h1>
-        <p>
-          Convenient Amenity Reservation System (CARS) helps residents easily book shared condo spaces and amenities.<br>
-          Enjoy seamless scheduling, real-time availability, and a modern user experience.
-        </p>
-        <div class="location-info">
-          <span class="location-cursor" id="location-cursor" title="View on map">📍</span>
-          <span class="location-address">Lakeview manors, Brgy. Ususan, Taguig City, 1630 Metro Manila</span>
-        </div>
-        <div class="map-holder" id="map-holder">
-          <a class="map-link" href="https://www.google.com/maps/place/Lakeview+Manors,+Brgy.+Ususan,+Taguig+City,+1630+Metro+Manila" target="_blank" title="Open in Google Maps" tabindex="0"></a>
-          <iframe
-            src="https://www.openstreetmap.org/export/embed.html?bbox=121.048%2C14.537%2C121.058%2C14.547&amp;layer=mapnik&amp;marker=14.542,121.053"
-            style="border:1px solid #ccc; width:100%; height:260px; border-radius:16px; margin-top:0;"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Lakeview Manors Map"></iframe>
-        </div>
-        <a href="#" class="btn-login explore-btn">Explore Now</a>
-      </section>
-
-      <!-- SECTION 3: Amenities Preview -->
-      <section class="amenities-preview">
-        <h2>Featured Amenities</h2>
-        <div class="amenities-cards">
-          <div class="amenity-card reserve-amenity" data-amenity="Swimming Pool">
-            <img src="static/resources/banner/2.jpg" alt="Swimming Pool" />
-            <h3>Swimming Pool</h3>
-            <p>Relax and unwind in our modern pool area, perfect for families and fitness.</p>
-            <a href="#" class="btn-login reserve-btn">Reserve</a>
-          </div>
-          <div class="amenity-card reserve-amenity" data-amenity="Function Hall">
-            <img src="static/resources/banner/3.jpg" alt="Function Hall" />
-            <h3>Function Hall</h3>
-            <p>Host your events in our spacious function hall, ideal for parties and gatherings.</p>
-            <a href="#" class="btn-login reserve-btn">Reserve</a>
-          </div>
-          <div class="amenity-card reserve-amenity" data-amenity="Basketball Court">
-            <img src="static/resources/banner/1.jpg" alt="Basketball Court" />
-            <h3>Basketball Court</h3>
-            <p>Stay active with our well-maintained basketball court, open for all residents.</p>
-            <a href="#" class="btn-login reserve-btn">Reserve</a>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </main>
-
+  <div class="footer-spacer"></div>
   <!-- FOOTER -->
   <footer class="footer-container">
     <p>© 2025 CARS. All rights reserved.</p>
   </footer>
-
-  <script src="static/js/rotate-images.js"></script>
-  <script src="static/js/theme-toggle.js"></script>
-  <script src="static/js/amenities-animate.js"></script>
-  <script src="static/js/location-cursor.js"></script>
-  <script src="static/js/amenities-reserve.js"></script>
+  <script src="../static/js/theme-toggle.js"></script>
+  <!-- Modern nav focus/active effect moved to external JS if needed -->
   <script src="static/js/login-modal.js"></script>
   <script src="static/js/signup-modal.js"></script>
-  <script>
-    // About Us modal logic
-    document.addEventListener('DOMContentLoaded', function () {
-      const aboutBtn = document.querySelector('.header-about-btn');
-      const aboutModal = document.getElementById('about-modal');
-      const aboutOverlay = document.getElementById('about-modal-overlay');
-      const closeAbout = document.getElementById('close-about-modal');
-      if (aboutBtn && aboutModal && aboutOverlay && closeAbout) {
-        aboutBtn.addEventListener('click', function (e) {
-          e.preventDefault();
-          aboutModal.classList.add('show');
-          aboutOverlay.classList.add('show');
-        });
-        closeAbout.addEventListener('click', function () {
-          aboutModal.classList.remove('show');
-          aboutOverlay.classList.remove('show');
-        });
-        aboutOverlay.addEventListener('click', function () {
-          aboutModal.classList.remove('show');
-          aboutOverlay.classList.remove('show');
-        });
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape') {
-            aboutModal.classList.remove('show');
-            aboutOverlay.classList.remove('show');
-          }
-        });
-      }
-    });
-  </script>
-  <style>
-    /* moved to static/css/index-style.css */
-  </style>
-  <script>
-    // Modern nav focus/active effect
-    document.addEventListener('DOMContentLoaded', function () {
-      const navLinks = document.querySelectorAll('.nav-curve-link');
-      navLinks.forEach(link => {
-        link.addEventListener('focus', function() {
-          navLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
-        });
-        link.addEventListener('blur', function() {
-          this.classList.remove('active');
-        });
-        link.addEventListener('click', function() {
-          navLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
-        });
-      });
-    });
-  </script>
 </body>
 </html>
-

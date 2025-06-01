@@ -6,6 +6,14 @@ index_bp = Blueprint('index', __name__, url_prefix='/')
 def index():
     return render_template('index.html')
 
+@index_bp.route('/about', methods=['GET'])
+def about():
+    return render_template('about.html')
+
+@index_bp.route('/contact', methods=['GET'])
+def contact():
+    return render_template('contact.html')
+
 @index_bp.route("/admin_dashboard", methods=['GET'])
 def admin_dashboard():
     if 'role' not in session or session['role'] != 'admin':
