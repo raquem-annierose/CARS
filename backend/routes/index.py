@@ -4,7 +4,9 @@ index_bp = Blueprint('index', __name__, url_prefix='/')
 
 @index_bp.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+     is_logged_in = 'role' in session
+     user_role = session.get('role')
+     return render_template('index.html', is_logged_in=is_logged_in, user_role=user_role)
 
 @index_bp.route('/about', methods=['GET'])
 def about():

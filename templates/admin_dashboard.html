@@ -8,43 +8,79 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Header -->
-  <header class="header-container">
-    <!-- Empty header (styled via admin_dashboard-style.css) -->
-  </header>
-
-  <div class="dashboard-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-top">
-        <div class="logo">CARS</div>
-        <div class="profile-section">
-          <div class="profile-avatar" id="profileAvatar">
-            <img src="/static/resources/profile/default-avatar.png" alt="Profile Avatar" id="profileAvatarImg" />
-            <input type="file" id="profileAvatarInput" accept="image/*" style="display:none;" />
-            <button class="profile-upload-btn" id="uploadAvatarBtn" title="Edit profile" tabindex="0" style="font-size:1.4rem;width:36px;height:36px;display:flex;align-items:center;justify-content:center;">✏️</button>
-          </div>
-          <div class="profile-username" id="profileUsername"></div>
-          <a href="#profile" class="profile-view-link menu-item">View Profile</a>
+  <div class="admin-container"> 
+    <!-- Header -->
+    <header class="header-container">
+      <div class="header-logo-placeholder" onclick="window.location.href='/'" style="cursor:pointer;">CARS</div> <!-- New Header Logo -->
+      <div class="header-spacer"></div> <!-- Pinalitan ang inline style ng class -->
+      <div class="profile-section" id="profileSection">
+        <div class="profile-username" id="profileUsername"></div>
+        <div class="profile-avatar" id="profileAvatar">
+          <img src="/static/resources/profile/default-avatar.png" alt="Profile Avatar" id="profileAvatarImg" />
+          <input type="file" id="profileAvatarInput" accept="image/*" style="display:none;" />
         </div>
+        <span class="profile-dropdown-arrow-icon" id="profileDropdownArrow">&#9662;</span> <!-- Pinalitan ang inline style ng class -->
+        <div class="profile-dropdown-menu" id="profileDropdownMenu">
+          <a href="#" id="profileMenuProfile">Profile</a>
+          <a href="#" id="profileMenuSettings">Settings</a>
+          <a href="#" id="profileMenuLogout">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="adminSidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-header">
+          <div class="logo" id="sidebarLogo" onclick="window.location.href='/'" style="cursor:pointer;">CARS</div>
+          <button id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+            </svg>
+          </button>
+        </div>
+        <div id="adminWelcomeMessage" class="admin-welcome-message"></div> <!-- New Welcome Message Div -->
         <nav class="menu">
-          <a href="#" class="menu-item active">Dashboard</a>
-          <a href="#residents" class="menu-item">Resident Accounts</a>
-          <a href="#admins" class="menu-item">Admin Accounts</a>
-          <a href="#reservations" class="menu-item">Reservations</a>
-          <a href="#payments" class="menu-item">Payments</a>
-          <a href="#reports" class="menu-item">Reports</a>
-          <a href="#" id="logoutBtn" class="menu-item logout"><span class="logout-icon" aria-label="Logout" style="display:inline-block;vertical-align:middle;">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;"><rect x="3" y="4" width="12" height="14" rx="3" fill="#ff6b6b"/><rect x="15.5" y="9" width="4" height="4" rx="1.5" fill="#fff"/><rect x="15.5" y="9" width="4" height="4" rx="1.5" stroke="#ff6b6b" stroke-width="1.5"/></svg>
-          </span> Logout</a>
+          <a href="#" class="menu-item" data-text="Dashboard">
+            <span class="menu-icon">D</span>
+            <span class="menu-text">Dashboard</span>
+          </a>
+          <a href="#reservations" class="menu-item" data-text="Reservations">
+            <span class="menu-icon">R</span>
+            <span class="menu-text">Reservations</span>
+          </a>
+          <a href="#payments" class="menu-item" data-text="Payments">
+            <span class="menu-icon">P</span>
+            <span class="menu-text">Payments</span>
+          </a>
+          <a href="#manage_accounts" class="menu-item" data-text="Manage Accounts">
+            <span class="menu-icon">M</span>
+            <span class="menu-text">Manage Accounts</span>
+          </a>
+          <a href="#reports" class="menu-item" data-text="Reports">
+            <span class="menu-icon">R</span>
+            <span class="menu-text">Reports</span>
+          </a>
+          <a href="#" id="logoutBtn" class="menu-item logout" data-text="Logout">
+            <span class="menu-icon">
+              <svg class="logout-svg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="4" width="12" height="14" rx="3" fill="#ff6b6b"/>
+                <rect x="15.5" y="9" width="4" height="4" rx="1.5" fill="#fff"/>
+                <rect x="15.5" y="9" width="4" height="4" rx="1.5" stroke="#ff6b6b" stroke-width="1.5"/>
+              </svg>
+            </span>
+            <span class="menu-text">Logout</span>
+          </a>
         </nav>
       </div>
     </aside>
 
 
     <!-- Main Content Panel -->
-    <main class="main-content">
-      <h2 id="main-title" style="display:none;"></h2>
+    <main class="main-content"> 
+      <h2 id="main-title" style="display:none !important;"></h2> <!-- Laging nakatago -->
+      
+      <!-- Dashboard Section (Default Visible Panel) -->
       <section id="dashboard-section" class="panel-section">
         <div class="dashboard-header-row">
           <h2 class="dashboard-title">Dashboard Overview</h2>
@@ -101,9 +137,8 @@
         </div>
       </section>
       
-      <!-- Include section panels -->
-      {% include 'admin_sidebar/resident_accounts.html' %}
-      {% include 'admin_sidebar/admin_accounts.html' %}
+      <!-- Included section panels (now inside main-content) -->
+      {% include 'admin_sidebar/manage_accounts.html' %}
       {% include 'admin_sidebar/reservation.html' %}
       {% include 'admin_sidebar/payments.html' %}
       {% include 'admin_sidebar/reports.html' %}
@@ -148,6 +183,7 @@
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet" />
   
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/static/js/profile.js"></script>
 <script src="/static/js/admin_dashboard.js"></script>
 </body>
 </html>

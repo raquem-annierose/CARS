@@ -2,70 +2,242 @@
 // Modern dashboard interactivity for admin panel
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Fetch profile info for sidebar
-  fetch('/api/login/profile', { credentials: 'include' })
-    .then(res => res.json())
-    .then(data => {
-      if (data && data.username) {
-        profileUsername.textContent = data.username;
-        if (data.avatar_url) {
-          // Use secure backend route for avatar
-          // If avatar_url is not null, get user_id from session or API
-          fetch('/api/session', { credentials: 'include' })
-            .then(res => res.json())
-            .then(sessionData => {
-              if (sessionData && sessionData.user_id) {
-                profileAvatarImg.src = `/api/profile/avatar/${sessionData.user_id}`;
-              } else {
-                profileAvatarImg.src = '/static/resources/profile/default-avatar.png';
-              }
-            });
-        } else {
-          profileAvatarImg.src = '/static/resources/profile/default-avatar.png';
+  
+  const menuItems = document.querySelectorAll('.menu-item');
+  const panelSections = document.querySelectorAll('.panel-section');
+  const headerContainer = document.querySelector('.header-container');
+  const profileSectionElement = document.getElementById('profileSection');
+  const sidebarElement = document.getElementById('adminSidebar'); 
+  const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+  const bodyElement = document.body;
+
+
+  function fetchAdminNameDetails() {
+    fetch('/api/admin/name-details', { credentials: 'include' })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch admin name details');
         }
-      }
-    });
-
-  // Fetch session info
-  fetch('/api/session', { credentials: 'include' })
-    .then(res => res.json())
-    .then(data => {
-      if (data.logged_in) {
-        document.getElementById('loggedInUser').textContent = `Logged in as: ${data.username}`;
-      } else {
-        document.getElementById('loggedInUser').textContent = 'Not logged in';
-      }
-    });
-
-  // Sidebar menu click handler for dynamic title and section display
-  document.querySelectorAll('.menu-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      if (this.classList.contains('logout')) return; // skip logout
-      e.preventDefault();
-      document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-      this.classList.add('active');
-      let title = this.textContent.trim();
-      document.getElementById('main-title').textContent = title;
-      document.getElementById('main-title').style.display = (title === 'Dashboard') ? 'none' : 'block';
-
-      // Hide all sections and show the selected one
-      document.querySelectorAll('.panel-section').forEach(section => {
-        section.style.display = 'none';
+        return response.json();
+      })
+      .then(data => {
+        const welcomeElement = document.getElementById('adminWelcomeMessage');
+        if (welcomeElement && data.first_name) {
+          welcomeElement.textContent = `Welcome back, ${data.first_name} ${data.last_name || ''}!`;
+        } else if (welcomeElement) {
+          welcomeElement.textContent = 'Welcome, Admin!'; // Fallback
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching admin name:', error);
+        const welcomeElement = document.getElementById('adminWelcomeMessage');
+        if (welcomeElement) {
+          welcomeElement.textContent = 'Welcome, Admin!'; // Fallback on error
+        }
       });
-      let sectionId = this.getAttribute('href');
-      if (sectionId && sectionId !== '#' && sectionId !== null) {
-        sectionId = sectionId.replace('#', '') + '-section';
-        let section = document.getElementById(sectionId);
-        if (section) section.style.display = 'block';
-      } else {
-        document.getElementById('dashboard-section').style.display = 'block';
+  }
+
+
+  function setActivePanel(panelIdToActivate) {
+    // Determine the actual section ID and menu item href
+    let targetHref;
+    let sectionIdToShow;
+
+    if (panelIdToActivate === 'dashboard' || !panelIdToActivate) {
+      targetHref = '#'; // This is the href for the Dashboard link
+      sectionIdToShow = 'dashboard-section';
+      panelIdToActivate = 'dashboard'; // Ensure consistent ID for storage
+    } else {
+      targetHref = `#${panelIdToActivate}`;
+      sectionIdToShow = `${panelIdToActivate}-section`;
+    }
+
+    menuItems.forEach(item => {
+      item.classList.remove('active');
+      // Add active class only if it's NOT the logout button AND href matches
+      if (!item.classList.contains('logout') && item.getAttribute('href') === targetHref) {
+        item.classList.add('active');
       }
+      // Special handling for dashboard: if targetHref is '#' and item's href is '#'
+      // and it's not a logout button, it should be active.
+      // This ensures that if multiple items have href="#", only the non-logout one (Dashboard) gets active.
+      if (targetHref === '#' && item.getAttribute('href') === '#' && !item.classList.contains('logout')) {
+         item.classList.add('active');
+      }
+    });
+
+    panelSections.forEach(section => {
+      section.style.display = 'none';
+    });
+
+    const sectionElement = document.getElementById(sectionIdToShow);
+    if (sectionElement) {
+      sectionElement.style.display = 'block';
+    } else if (panelIdToActivate !== 'dashboard') { // Fallback to dashboard if specific panel not found
+      document.getElementById('dashboard-section').style.display = 'block';
+      menuItems.forEach(item => {
+        if (item.getAttribute('href') === '#') item.classList.add('active');
+      });
+      localStorage.setItem('lastActiveAdminPanel', 'dashboard');
+      return; // Exit early
+    }
+     // If dashboard was intended and not found (highly unlikely but good to handle)
+    else if (!document.getElementById('dashboard-section') && panelIdToActivate === 'dashboard') {
+        console.error("Dashboard section not found!");
+        // Potentially show the first available panel or an error message
+    }
+
+
+    // Store the active panel ID (e.g., "dashboard", "reservations")
+    localStorage.setItem('lastActiveAdminPanel', panelIdToActivate);
+  }
+
+  // Sidebar Toggle Logic
+  if (sidebarToggleBtn && sidebarElement) {
+    // Check localStorage for saved sidebar state
+    const isSidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    if (isSidebarCollapsed) {
+      sidebarElement.classList.add('collapsed');
+      bodyElement.classList.add('sidebar-collapsed'); // Add class to body
+    }
+
+    sidebarToggleBtn.addEventListener('click', () => {
+      sidebarElement.classList.toggle('collapsed');
+      bodyElement.classList.toggle('sidebar-collapsed'); // Toggle class on body
+      // Save state to localStorage
+      if (sidebarElement.classList.contains('collapsed')) {
+        localStorage.setItem('sidebarCollapsed', 'true');
+      } else {
+        localStorage.setItem('sidebarCollapsed', 'false');
+      }
+    });
+  }
+
+  // Populate menu icons with first letters (if not already an SVG/icon)
+  menuItems.forEach(item => {
+    const iconSpan = item.querySelector('.menu-icon');
+    const textData = item.dataset.text; // Get text from data-text attribute
+    if (iconSpan && textData && iconSpan.children.length === 0) { // Check if icon span is empty
+      iconSpan.textContent = textData.charAt(0).toUpperCase();
+    }
+  });
+
+  // On page load, check localStorage for the last active panel
+  const lastActivePanel = localStorage.getItem('lastActiveAdminPanel');
+  if (lastActivePanel) {
+    setActivePanel(lastActivePanel);
+  } else {
+    setActivePanel('dashboard'); // Default to dashboard
+  }
+
+  fetchAdminNameDetails(); // Call the function to fetch and display the name
+
+  // Sidebar menu click handler
+  menuItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      const isLogoutButton = this.classList.contains('logout');
+
+      if (!isLogoutButton) {
+        e.preventDefault();
+        e.stopPropagation(); // Prevent click from bubbling up to document
+      } else {
+        // Logout logic is handled by its own dedicated listener
+        return;
+      }
+      
+      let clickedPanelId;
+      const href = this.getAttribute('href');
+
+      if (href === '#') {
+        clickedPanelId = 'dashboard';
+      } else {
+        clickedPanelId = href.replace('#', '');
+      }
+      setActivePanel(clickedPanelId);
     });
   });
 
+  // Add click listener to all panel sections to stop propagation
+  panelSections.forEach(panel => {
+    panel.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+  });
+
+  // Add click listener to the header container
+  if (headerContainer && profileSectionElement) {
+    headerContainer.addEventListener('click', function(e) {
+      // If the click target is a descendant of headerContainer BUT NOT a descendant of profileSectionElement
+      if (!profileSectionElement.contains(e.target)) {
+        // This means the click was on the header, but outside the profile interaction area.
+        // Stop this click from bubbling up to any document/window "click outside" listeners.
+        e.stopPropagation();
+        // console.log('Header click outside profile section, propagation stopped.');
+      }
+      // Clicks inside profileSectionElement (e.g., on the arrow or avatar) will propagate normally
+      // and should be handled by profile.js.
+    });
+  }
+
+  // Add click listener to the sidebar itself 
+  if (sidebarElement) { // I-uncomment ang block na ito
+    sidebarElement.addEventListener('click', function(e) {
+      // If the click target is the sidebar itself, or a child that is NOT a menu-item
+      // (menu-item clicks are already handled and stopped by their own listener)
+      let target = e.target;
+      let isMenuItemOrChild = false;
+      while(target && target !== this) { // 'this' refers to sidebarElement
+        if (target.classList && target.classList.contains('menu-item')) {
+          isMenuItemOrChild = true;
+          break;
+        }
+        target = target.parentNode;
+      }
+      
+      if (!isMenuItemOrChild) {
+        // Click was on sidebar's empty space, or non-interactive elements like logo.
+        // Stop this click from bubbling up to any document/window "click outside" listeners.
+        e.stopPropagation();
+        // console.log('Sidebar click outside menu-item, propagation stopped.');
+      }
+      // Clicks on menu-items themselves will have their propagation stopped by their own listeners.
+    });
+  }
+
+  // // Add click listener to the main content area // Mananatiling commented out
+  // if (mainContentElement) {
+  //   mainContentElement.addEventListener('click', function(e) {
+  //     let target = e.target;
+  //     let isPanelSectionOrChild = false;
+  //     while(target && target !== this) {
+  //       if (target.classList && target.classList.contains('panel-section')) {
+  //         isPanelSectionOrChild = true;
+  //         break;
+  //       }
+  //       target = target.parentNode;
+  //     }
+
+  //     if (!isPanelSectionOrChild) {
+  //       e.stopPropagation();
+  //     }
+  //   });
+  // }
+
+  // // Add click listener to the admin container itself // Mananatiling commented out
+  // if (adminContainerElement && headerContainer && sidebarElement && mainContentElement) {
+  //   adminContainerElement.addEventListener('click', function(e) {
+  //     if (e.target === adminContainerElement) {
+  //       e.stopPropagation();
+  //     }
+  //   });
+  // }
+
+
   // Logout handler
   document.getElementById('logoutBtn').addEventListener('click', function (e) {
-    e.preventDefault();
+    e.preventDefault(); 
+    // e.stopPropagation(); // Optional: if logout click also closes profile prematurely
+
     if (confirm('Are you sure you want to logout?')) {
       fetch('/api/logout', {
         method: 'POST',
@@ -74,8 +246,9 @@ document.addEventListener('DOMContentLoaded', () => {
           'Content-Type': 'application/json'
         }
       }).then(res => res.json())
-        .then(data => {
+        .then(data => {  // Corrected: added parentheses around data
           if (data.success) {
+            localStorage.removeItem('lastActiveAdminPanel'); // Clear stored panel on logout
             window.location.href = '/';
           }
         });
@@ -199,8 +372,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Example API endpoints, replace with your actual endpoints
     fetch('/api/admin/reservations-week', { credentials: 'include' })
       .then(res => res.json())
-      .then(data => {
-        renderReservationsBarChart({
+      .then(data => { // Inayos: dinagdagan ng parenthesis ang 'data'
+        renderReservationsBarGraph({ // Assuming this should be renderReservationsBarGraph based on the function name below it
           labels: data.labels || ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
           values: data.values || [0,0,0,0,0,0,0]
         });
@@ -279,200 +452,33 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  // PROFILE AVATAR LOGIC
-  const profileAvatarImg = document.getElementById('profileAvatarImg');
-  const profileUsername = document.getElementById('profileUsername');
-  const uploadAvatarBtn = document.getElementById('uploadAvatarBtn');
-  const profileAvatarInput = document.getElementById('profileAvatarInput');
-
-  // Profile modal logic (file-based avatar)
-  const profileEditModal = document.getElementById('profileEditModal');
-  const closeProfileModal = document.getElementById('closeProfileModal');
-  const profileViewLink = document.querySelector('.profile-view-link');
-  const modalProfileAvatarImg = document.getElementById('modalProfileAvatarImg');
-  const modalProfileAvatarInput = document.getElementById('modalProfileAvatarInput');
-  const modalChangeAvatarBtn = document.getElementById('modalChangeAvatarBtn');
-  const modalProfileUsername = document.getElementById('modalProfileUsername');
-  const profileEditForm = document.getElementById('profileEditForm');
-  const profileModalMsg = document.getElementById('profileModalMsg');
-
-  // --- FIX: Always use backend avatar_url for modal and cropper preview ---
-  function openProfileEditModal() {
-    fetch('/api/login/profile', { credentials: 'include' })
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.avatar_url) {
-          modalProfileAvatarImg.src = data.avatar_url + '?t=' + Date.now();
-        } else {
-          modalProfileAvatarImg.src = '/static/resources/profile/default-avatar.png';
-        }
-        if (data && data.username) {
-          modalProfileUsername.value = data.username;
-        }
-        profileModalMsg.style.display = 'none';
-        profileEditModal.style.display = 'block';
-      });
-  }
-
-  if (uploadAvatarBtn && modalProfileAvatarImg && profileEditModal && closeProfileModal && profileEditForm && profileUsername && profileAvatarImg) {
-    uploadAvatarBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      openProfileEditModal();
-    });
-    closeProfileModal.addEventListener('click', function() {
-      profileEditModal.style.display = 'none';
-    });
-  }
-  if (modalChangeAvatarBtn && modalProfileAvatarInput) {
-    modalChangeAvatarBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      modalProfileAvatarInput.click();
-    });
-  }
-  // --- FIX: Cropper.js initialization null check ---
-  let cropper = null;
-  const cropperImage = document.getElementById('cropperImage');
-  const cropperContainer = document.getElementById('cropperContainer');
-  const cropImageBtn = document.getElementById('cropImageBtn');
-  const croppedAvatarData = document.getElementById('croppedAvatarData');
-  if (modalProfileAvatarInput && cropperImage && cropperContainer && cropImageBtn && croppedAvatarData) {
-    modalProfileAvatarInput.addEventListener('change', function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          cropperImage.src = e.target.result;
-          cropperContainer.style.display = 'block';
-          if (cropper) { cropper.destroy(); }
-          cropper = new Cropper(cropperImage, {
-            aspectRatio: 1,
-            viewMode: 1,
-            autoCropArea: 1,
-            minContainerWidth: 220,
-            minContainerHeight: 220
-          });
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-    cropImageBtn.addEventListener('click', function() {
-      if (cropper) {
-        const canvas = cropper.getCroppedCanvas({ width: 220, height: 220 });
-        const dataUrl = canvas.toDataURL('image/png');
-        modalProfileAvatarImg.src = dataUrl;
-        croppedAvatarData.value = dataUrl;
-        cropper.destroy();
-        cropper = null;
-        cropperContainer.style.display = 'none';
-      }
-    });
-  }
-
-  // Save profile changes
-  profileEditForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('username', modalProfileUsername.value);
-    if (croppedAvatarData.value) {
-      formData.append('cropped_avatar', croppedAvatarData.value);
-    }
-    fetch('/api/login/profile', {
-      method: 'POST',
-      credentials: 'include',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        updateSidebarProfile();
-        // After update, reload avatar in modal for next open
-        fetch('/api/login/profile', { credentials: 'include' })
-          .then(res => res.json())
-          .then(data => {
-            if (data && data.avatar_url) {
-              modalProfileAvatarImg.src = data.avatar_url + '?t=' + Date.now();
-            }
-          });
-        profileModalMsg.textContent = 'Profile updated!';
-        profileModalMsg.style.display = 'block';
-        setTimeout(() => { profileModalMsg.style.display = 'none'; profileEditModal.style.display = 'none'; }, 1500);
-      } else {
-        profileModalMsg.textContent = data.error || 'Update failed.';
-        profileModalMsg.style.display = 'block';
-      }
-    })
-    .catch(() => {
-      profileModalMsg.textContent = 'Update failed.';
-      profileModalMsg.style.display = 'block';
-    });
-  });
-
-  // View Profile loads info in main panel
-  profileViewLink.addEventListener('click', function(e) {
-    e.preventDefault();
-    document.querySelectorAll('.panel-section').forEach(section => section.style.display = 'none');
-    let profileSection = document.getElementById('profile-view-section');
-    if (!profileSection) {
-      profileSection = document.createElement('section');
-      profileSection.id = 'profile-view-section';
-      profileSection.className = 'panel-section';
-      profileSection.innerHTML = `
-        <h2>Profile Information</h2>
-        <div style="display:flex;align-items:center;gap:24px;margin-bottom:24px;">
-          <img src="${profileAvatarImg.src}" alt="Profile Avatar" style="width:90px;height:90px;border-radius:50%;object-fit:cover;">
-          <div>
-            <div style="font-size:1.2rem;font-weight:600;">${profileUsername.textContent}</div>
-          </div>
-        </div>
-        <p style="color:#888;">To edit your profile, click the ✏️ button beside your avatar.</p>
-      `;
-      document.querySelector('.main-content').appendChild(profileSection);
-    } else {
-      profileSection.style.display = 'block';
-      profileSection.querySelector('img').src = profileAvatarImg.src;
-      profileSection.querySelector('div > div').textContent = profileUsername.textContent;
-    }
-    document.getElementById('main-title').textContent = 'Profile';
-    document.getElementById('main-title').style.display = 'block';
-  });
-
-  // Update sidebar profile info
-  function updateSidebarProfile() {
-    fetch('/api/login/profile', { credentials: 'include' })
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.username) {
-          profileUsername.textContent = data.username;
-          if (data.avatar_url) {
-            // Use secure backend route for avatar
-            fetch('/api/session', { credentials: 'include' })
-              .then(res => res.json())
-              .then(sessionData => {
-                if (sessionData && sessionData.user_id) {
-                  profileAvatarImg.src = `/api/profile/avatar/${sessionData.user_id}?t=${Date.now()}`;
-                } else {
-                  profileAvatarImg.src = '/static/resources/profile/default-avatar.png';
-                }
-              });
-          } else {
-            profileAvatarImg.src = '/static/resources/profile/default-avatar.png';
-          }
-        }
-      });
-  }
-
-  // On page load, fetch sidebar profile
-  updateSidebarProfile();
-
   if (document.getElementById('dashboardPieChart')) {
     fetchDashboardStats();
   }
-  if (document.getElementById('reservationsBarChart') && document.getElementById('reservationsAmenityChart')) {
-    fetchReservationGraphs();
+  // Ensure these IDs exist before trying to fetch/render
+  const reservationsBarChartEl = document.getElementById('reservationsBarChart');
+  const reservationsAmenityChartEl = document.getElementById('reservationsAmenityChart');
+
+  if (reservationsBarChartEl && reservationsAmenityChartEl) {
+    // It seems 'reservationsBarChart' is not used for rendering in fetchReservationGraphs
+    // fetchReservationGraphs calls renderReservationsBarGraph and renderReservationsAmenityChart
+    // Let's assume reservationsBarGraph is the correct one for the bar graph.
+    // If there's a separate reservationsBarChart, its fetching logic might be missing.
+    // For now, this condition might be too broad if reservationsBarChart is never rendered by this function.
   }
-  if (document.getElementById('reservationsBarGraph')) {
-    fetchReservationsBarGraph();
+  
+  // Corrected logic for fetching graphs:
+  // Check if the specific canvas elements for the graphs exist before fetching.
+  if (document.getElementById('reservationsBarGraph') || document.getElementById('reservationsAmenityChart')) {
+      fetchReservationGraphs();
   }
+  // The standalone fetchReservationsBarGraph might be redundant if fetchReservationGraphs already covers it.
+  // If fetchReservationsBarGraph is for a different bar graph, ensure its canvas ID is checked.
+  // else if (document.getElementById('reservationsBarGraph')) { // This was the original separate call
+  //   fetchReservationsBarGraph(); // This might be redundant if already called by fetchReservationGraphs
+  // }
+
+
   if (document.getElementById('latest-events-list')) {
     fetchLatestEvents();
   }

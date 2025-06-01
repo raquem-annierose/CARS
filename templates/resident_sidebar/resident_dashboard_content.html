@@ -1,0 +1,32 @@
+<section id="resident-dashboard-section" class="panel-section">
+  <div class="dashboard-header-row">
+    <h2 class="dashboard-title">My Dashboard</h2>
+    <div class="dashboard-date" id="residentDashboardDate"></div>
+  </div>
+  <div class="dashboard-cards">
+    <div class="dashboard-card">
+      <div class="card-icon">📅</div>
+      <div class="card-title">Upcoming Reservations</div>
+      <div class="card-value" id="upcoming-reservations-count">--</div>
+      <a href="#" class="card-link menu-item-trigger" data-panel="my_reservations">View Details &rarr;</a>
+    </div>
+    <div class="dashboard-card">
+      <div class="card-icon">💳</div>
+      <div class="card-title">Pending Payments</div>
+      <div class="card-value" id="pending-payments-count">--</div>
+      <a href="#" class="card-link menu-item-trigger" data-panel="resident_payments">View Payments &rarr;</a>
+    </div>
+    <div class="dashboard-card">
+      <div class="card-icon">➕</div>
+      <div class="card-title">New Reservation</div>
+      <div class="card-value" style="font-size: 1.5rem; margin-bottom: 10px;">Book an Amenity</div>
+      <a href="#" class="card-link menu-item-trigger" data-panel="new_reservation">Make a Booking &rarr;</a>
+    </div>
+  </div>
+  <div class="quick-info-panel">
+    <h3>Recent Activity</h3>
+    <ul id="recent-activity-list">
+      <li>No recent activity.</li>
+    </ul>
+  </div>
+</section>

@@ -33,6 +33,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
+  // Password toggle functionality for login modal (using checkbox)
+  if (modal) {
+    const passwordInput = modal.querySelector('#passwordInput'); // Target specific password input in login modal
+    const showPasswordCheckbox = modal.querySelector('#showPassword'); // Target specific checkbox in login modal
+
+    if (passwordInput && showPasswordCheckbox) {
+      showPasswordCheckbox.addEventListener('change', function() {
+        // When the checkbox state changes
+        if (this.checked) {
+          passwordInput.type = 'text'; // Show password
+        } else {
+          passwordInput.type = 'password'; // Hide password
+        }
+      });
+    }
+  }
+
   // Handle login form submission (same as login.html)
   const loginForm = document.getElementById('loginForm');
   if (loginForm) {

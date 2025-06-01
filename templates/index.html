@@ -21,8 +21,16 @@
         <input type="text" name="search" placeholder="Search..." class="header-search-input" />
         <button type="submit" class="header-search-btn">🔍</button>
       </form>
-      <a href="#" class="btn-login header-auth-btn">Login</a>
-      <a href="#" class="btn-signup header-auth-btn">Sign up</a>
+      {% if is_logged_in %}
+        {% if user_role == 'admin' %}
+          <a href="/admin_dashboard" class="btn-profile header-auth-btn">Back to Profile</a>
+        {% elif user_role == 'resident' %}
+          <a href="/resident_dashboard" class="btn-profile header-auth-btn">Back to Profile</a>
+        {% endif %}
+      {% else %}
+        <a href="#" class="btn-login header-auth-btn">Login</a>
+        <a href="#" class="btn-signup header-auth-btn">Sign up</a>
+      {% endif %}
       <button id="toggle-theme" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
     </nav>
   </header>
@@ -230,58 +238,8 @@
   <script src="static/js/amenities-reserve.js"></script>
   <script src="static/js/login-modal.js"></script>
   <script src="static/js/signup-modal.js"></script>
-  <script>
-    // About Us modal logic
-    document.addEventListener('DOMContentLoaded', function () {
-      const aboutBtn = document.querySelector('.header-about-btn');
-      const aboutModal = document.getElementById('about-modal');
-      const aboutOverlay = document.getElementById('about-modal-overlay');
-      const closeAbout = document.getElementById('close-about-modal');
-      if (aboutBtn && aboutModal && aboutOverlay && closeAbout) {
-        aboutBtn.addEventListener('click', function (e) {
-          e.preventDefault();
-          aboutModal.classList.add('show');
-          aboutOverlay.classList.add('show');
-        });
-        closeAbout.addEventListener('click', function () {
-          aboutModal.classList.remove('show');
-          aboutOverlay.classList.remove('show');
-        });
-        aboutOverlay.addEventListener('click', function () {
-          aboutModal.classList.remove('show');
-          aboutOverlay.classList.remove('show');
-        });
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape') {
-            aboutModal.classList.remove('show');
-            aboutOverlay.classList.remove('show');
-          }
-        });
-      }
-    });
-  </script>
-  <style>
-    /* moved to static/css/index-style.css */
-  </style>
-  <script>
-    // Modern nav focus/active effect
-    document.addEventListener('DOMContentLoaded', function () {
-      const navLinks = document.querySelectorAll('.nav-curve-link');
-      navLinks.forEach(link => {
-        link.addEventListener('focus', function() {
-          navLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
-        });
-        link.addEventListener('blur', function() {
-          this.classList.remove('active');
-        });
-        link.addEventListener('click', function() {
-          navLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
-        });
-      });
-    });
-  </script>
+  <script src="static/js/index.js"></script>
+  
 </body>
 </html>
 
