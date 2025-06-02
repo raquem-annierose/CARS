@@ -177,24 +177,74 @@ def register_admin():
         if conn:
             conn.close()
 
+@register_bp.route('/register/check-exists', methods=['POST'])
+def check_exists():
+    data = request.get_json()
+    username = data.get('username')
+    email = data.get('email')
+
+    username_exists = False
+    email_exists = False
+
+    conn = None
+    cursor = None
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        if username:
+            cursor.execute("SELECT user_id FROM Users WHERE username = %s", (username,))
+            if cursor.fetchone():
+                username_exists = True
+        
+        if email:
+            cursor.execute("SELECT user_id FROM Users WHERE email = %s", (email,))
+            if cursor.fetchone():
+                email_exists = True
+        
+        return jsonify({
+            'username_exists': username_exists,
+            'email_exists': email_exists
+        })
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': 'Server error during existence check.'}), 500
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
 @register_bp.route('/validate-signup', methods=['POST'])
 def validate_signup():
     data = request.get_json()
     errors = {}
-    if not is_valid_username(data.get('username', '')):
-        errors['username'] = 'Invalid username.'
-    if not is_valid_email(data.get('email', '')):
-        errors['email'] = 'Invalid email.'
-    if not is_valid_password(data.get('password', '')):
-        errors['password'] = 'Invalid password.'
-    if not is_valid_name(data.get('first_name', '')):
-        errors['first_name'] = 'Invalid first name.'
-    if not is_valid_name(data.get('last_name', '')):
-        errors['last_name'] = 'Invalid last name.'
-    if not is_valid_unit_number(data.get('unit_number', '')):
-        errors['unit_number'] = 'Invalid unit number.'
-    if not is_valid_building(data.get('building', '')):
-        errors['building'] = 'Invalid building.'
+
+    # Validate only if the field is present in the request
+    if 'username' in data and not is_valid_username(data['username']):
+        errors['username'] = 'Username must be 4–20 characters long and can include letters, digits, underscore, or dot.'
+    if 'email' in data and not is_valid_email(data['email']):
+        errors['email'] = 'Invalid email format.'
+    if 'password' in data and not is_valid_password(data['password']):
+        errors['password'] = 'Password must be at least 8 characters long and include letters and numbers.'
+    
+    if 'first_name' in data and not is_valid_name(data['first_name']):
+        errors['first_name'] = 'First name must contain only letters and spaces and cannot be empty.'
+    if 'last_name' in data and not is_valid_name(data['last_name']):
+        errors['last_name'] = 'Last name must contain only letters and spaces and cannot be empty.'
+    
+    # For unit_number and building, they are considered valid if present and not empty.
+    # The frontend sends them trimmed. If they are optional and can be empty,
+    # the validator or this logic might need adjustment.
+    # Assuming they are required if present in the step.
+    if 'unit_number' in data and not is_valid_unit_number(data['unit_number']):
+        errors['unit_number'] = 'Unit number cannot be empty.'
+    if 'building' in data and not is_valid_building(data['building']):
+        errors['building'] = 'Building cannot be empty.'
+
     if errors:
         return jsonify({'valid': False, 'errors': errors}), 400
     return jsonify({'valid': True})

@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const messageBox = document.getElementById('signupMessage');
       // Only submit if on last step
       if (currentStep !== steps.length - 1) return;
-      // Validate required fields
+      // Validate required fields for contact - kept as backend doesn't strictly require them initially
       const contact = this.contact_number.value.trim();
       const country = this.country_code.value;
       if (!contact) {
@@ -118,53 +118,44 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.next-step').forEach(btn => {
     btn.addEventListener('click', async function () {
       const msg = document.getElementById('signupMessage');
-      msg.textContent = '';
+      msg.textContent = ''; // Clear previous messages
+
       if (currentStep === 0) {
         // Step 1: validate username, email, password, confirm password
         const username = signupForm.username.value.trim();
         const email = signupForm.email.value.trim();
         const pw = signupForm.password.value;
         const cpw = signupForm.confirm_password.value;
-        let error = '';
-        if (username.length !== 8) {
-          error = 'Username must be exactly 8 characters.';
-        } else if (!/^[a-zA-Z0-9]+$/.test(username)) {
-          error = 'Username must be alphanumeric.';
-        } else if (!email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)) {
-          error = 'Invalid email format.';
-        } else if (pw.length < 8 || !/[a-zA-Z]/.test(pw) || !/[0-9]/.test(pw)) {
-          error = 'Password must be at least 8 characters and include letters and numbers.';
-        } else if (pw !== cpw) {
-          error = 'Passwords do not match.';
-        }
-        if (error) {
-          msg.textContent = error;
+        
+        if (pw !== cpw) {
+          msg.textContent = 'Passwords do not match.';
           msg.style.color = '#f87171';
           return;
         }
-        // Check username/email existence via API
+
+        // Validate fields via API
         try {
-          const res = await fetch('http://localhost:5000/api/resident/validate-signup', {
+          const validateRes = await fetch('http://localhost:5000/api/validate-signup', { // Corrected API endpoint
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, email, password: pw })
           });
-          const result = await res.json();
-          if (!res.ok) {
-            if (result.errors && result.errors.username) {
-              msg.textContent = result.errors.username;
-              msg.style.color = '#f87171';
-              return;
+          const validateResult = await validateRes.json();
+
+          if (!validateRes.ok) {
+            let errorMsg = 'Please check your input.';
+            if (validateResult.errors) {
+              if (validateResult.errors.username) errorMsg = validateResult.errors.username;
+              else if (validateResult.errors.email) errorMsg = validateResult.errors.email;
+              else if (validateResult.errors.password) errorMsg = validateResult.errors.password;
+              // Use the first error found if multiple, or a general one
+              else errorMsg = Object.values(validateResult.errors)[0] || errorMsg;
             }
-            if (result.errors && result.errors.email) {
-              msg.textContent = result.errors.email;
-              msg.style.color = '#f87171';
-              return;
-            }
-            msg.textContent = 'Please check your input.';
+            msg.textContent = errorMsg;
             msg.style.color = '#f87171';
             return;
           }
+
           // Check if username/email already exists
           const existsRes = await fetch('http://localhost:5000/api/register/check-exists', {
             method: 'POST',
@@ -183,38 +174,50 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
           }
         } catch (err) {
-          msg.textContent = 'Server error. Please try again.';
+          msg.textContent = 'Server error during validation. Please try again.';
           msg.style.color = '#f87171';
+          console.error('Validation fetch error:', err);
           return;
         }
-      }
-      // Step 2: validate names, unit, building
-      if (currentStep === 1) {
+      } else if (currentStep === 1) {
+        // Step 2: validate names (first_name, last_name) via API
         const firstName = signupForm.first_name.value.trim();
         const lastName = signupForm.last_name.value.trim();
-        const unit = signupForm.unit_number.value.trim();
-        const building = signupForm.building.value.trim();
-        if (!firstName.match(/^[a-zA-Z\s]+$/)) {
-          msg.textContent = 'First name must contain only letters and spaces.';
+        // Middle name is optional and typically doesn't have strict format validation here.
+        // Unit number and building are for the next step.
+
+        try {
+          const validateRes = await fetch('http://localhost:5000/api/validate-signup', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              first_name: firstName, 
+              last_name: lastName
+              // Do NOT send unit_number or building here
+            })
+          });
+          const validateResult = await validateRes.json();
+
+          if (!validateRes.ok) {
+            let errorMsg = 'Please check your input for personal details.';
+             if (validateResult.errors) {
+              if (validateResult.errors.first_name) errorMsg = validateResult.errors.first_name;
+              else if (validateResult.errors.last_name) errorMsg = validateResult.errors.last_name;
+              // Do not check for unit_number or building errors here
+              else errorMsg = Object.values(validateResult.errors)[0] || errorMsg;
+            }
+            msg.textContent = errorMsg;
+            msg.style.color = '#f87171';
+            return;
+          }
+        } catch (err) {
+          msg.textContent = 'Server error during validation. Please try again.';
           msg.style.color = '#f87171';
-          return;
-        }
-        if (!lastName.match(/^[a-zA-Z\s]+$/)) {
-          msg.textContent = 'Last name must contain only letters and spaces.';
-          msg.style.color = '#f87171';
-          return;
-        }
-        if (!unit) {
-          msg.textContent = 'Unit number is required.';
-          msg.style.color = '#f87171';
-          return;
-        }
-        if (!building) {
-          msg.textContent = 'Building is required.';
-          msg.style.color = '#f87171';
+          console.error('Validation fetch error:', err);
           return;
         }
       }
+      // If all validations pass for the current step, proceed
       if (currentStep < steps.length - 1) showStep(currentStep + 1);
     });
   });
