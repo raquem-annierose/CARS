@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         // Check username/email existence via API
         try {
-          const res = await fetch('http://localhost:5000/api/register/validate-signup', {
+          const res = await fetch('http://localhost:5000/api/resident/validate-signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, email, password: pw })
