@@ -10,7 +10,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebarElement = document.getElementById('adminSidebar'); 
   const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
   const bodyElement = document.body;
+  const dashboardDateEl = document.querySelector('.dashboard-date');
 
+   // Set dashboard date to current date
+  function setDashboardDate() {
+    if (dashboardDateEl) {
+      const now = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      dashboardDateEl.textContent = now.toLocaleDateString(undefined, options);
+    }
+  }
+  setDashboardDate();
 
   function fetchAdminNameDetails() {
     fetch('/api/admin/name-details', { credentials: 'include' })
