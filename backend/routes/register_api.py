@@ -217,35 +217,37 @@ def check_exists():
             cursor.close()
         if conn:
             conn.close()
-            @register_bp.route('/validate-signup', methods=['POST'])
-            def validate_signup():
-                data = request.get_json()
-                errors = {}
+@register_bp.route('/validate-signup', methods=['POST', 'OPTIONS'])
+def validate_signup():
+    if request.method == 'OPTIONS':
+        return '', 200  # Allow CORS preflight
+    data = request.get_json()
+    errors = {}
 
-                # Validate only if the field is present in the request
-                if 'username' in data and not is_valid_username(data['username']):
-                    errors['username'] = (
-                        'Username must be 4–20 chars, letters, digits, _ or .'
-                    )
-                if 'email' in data and not is_valid_email(data['email']):
-                    errors['email'] = 'Invalid email format.'
-                if 'password' in data and not is_valid_password(data['password']):
-                    errors['password'] = (
-                        'Password must be 8+ chars, include letters and numbers.'
-                    )
-                if 'first_name' in data and not is_valid_name(data['first_name']):
-                    errors['first_name'] = (
-                        'First name: only letters/spaces, not empty.'
-                    )
-                if 'last_name' in data and not is_valid_name(data['last_name']):
-                    errors['last_name'] = (
-                        'Last name: only letters/spaces, not empty.'
-                    )
-                if 'unit_number' in data and not is_valid_unit_number(data['unit_number']):
-                    errors['unit_number'] = 'Unit number cannot be empty.'
-                if 'building' in data and not is_valid_building(data['building']):
-                    errors['building'] = 'Building cannot be empty.'
+    # Validate only if the field is present in the request
+    if 'username' in data and not is_valid_username(data['username']):
+        errors['username'] = (
+            'Username must be 4–20 chars, letters, digits, _ or .'
+        )
+    if 'email' in data and not is_valid_email(data['email']):
+        errors['email'] = 'Invalid email format.'
+    if 'password' in data and not is_valid_password(data['password']):
+        errors['password'] = (
+            'Password must be 8+ chars, include letters and numbers.'
+        )
+    if 'first_name' in data and not is_valid_name(data['first_name']):
+        errors['first_name'] = (
+            'First name: only letters/spaces, not empty.'
+        )
+    if 'last_name' in data and not is_valid_name(data['last_name']):
+        errors['last_name'] = (
+            'Last name: only letters/spaces, not empty.'
+        )
+    if 'unit_number' in data and not is_valid_unit_number(data['unit_number']):
+        errors['unit_number'] = 'Unit number cannot be empty.'
+    if 'building' in data and not is_valid_building(data['building']):
+        errors['building'] = 'Building cannot be empty.'
 
-                if errors:
-                    return jsonify({'valid': False, 'errors': errors}), 400
-                return jsonify({'valid': True})
+    if errors:
+        return jsonify({'valid': False, 'errors': errors}), 400
+    return jsonify({'valid': True})

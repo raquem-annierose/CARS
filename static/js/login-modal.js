@@ -67,26 +67,44 @@ document.addEventListener('DOMContentLoaded', function () {
           credentials: 'include',
           body: JSON.stringify(formData)
         });
-        const result = await response.json();
-        if (result.success) {
-          messageDiv.textContent = 'Login successful! Redirecting...';
-          messageDiv.style.color = '#4ade80';
-          if (result.role === 'admin') {
-            window.location.href = 'admin_dashboard';
-          } else if (result.role === 'resident') {
-            window.location.href = 'resident_dashboard';
+      const result = await response.json();
+      if (result.success) {
+        messageDiv.textContent = 'Login successful! Redirecting...';
+        messageDiv.style.color = '#4ade80';
+
+        // SESSION CHECK HERE
+        try {
+          const sessionRes = await fetch('http://localhost:5000/api/session', {
+            method: 'GET',
+            credentials: 'include'
+          });
+          const data = await sessionRes.json();
+          if (data.logged_in) {
+            if (result.role === 'admin') {
+              window.location.href = 'admin_dashboard';
+            } else if (result.role === 'resident') {
+              window.location.href = 'resident_dashboard';
+            }
+          } else {
+            messageDiv.textContent = 'Session not set. Please try again.';
+            messageDiv.style.color = '#f87171';
           }
-        } else {
-          messageDiv.textContent = result.error || 'Login failed.';
+        } catch (sessionError) {
+          messageDiv.textContent = 'Session check failed. Please try again.';
           messageDiv.style.color = '#f87171';
+          console.error('Session fetch error:', sessionError);
         }
-      } catch (error) {
-        messageDiv.textContent = 'Server error. Please try again later.';
+      } else {
+        messageDiv.textContent = result.error || 'Login failed.';
         messageDiv.style.color = '#f87171';
-        console.error('Fetch error:', error);
       }
-    });
-  }
+    } catch (error) {
+      messageDiv.textContent = 'Server error. Please try again later.';
+      messageDiv.style.color = '#f87171';
+      console.error('Fetch error:', error);
+    }
+  });
+}
 
   // Hide login modal if opening signup modal
   document.querySelectorAll('.btn-signup').forEach(btn => {
