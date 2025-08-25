@@ -1,0 +1,34 @@
+<section id="new_reservation-section" class="panel-section" style="display:none;">
+  <h2>Make a New Reservation</h2>
+  <p>Select an amenity, choose your desired date and time, and submit your request.</p>
+  <form id="newReservationFormResident">
+    <div class="form-group">
+      <label for="residentAmenitySelect">Select Amenity:</label>
+      <select id="residentAmenitySelect" name="amenity" required>
+        <option value="">-- Choose Amenity --</option>
+        <!-- Options to be populated dynamically or listed here -->
+        <option value="pool">Swimming Pool</option>
+        <option value="basketball_court">Basketball Court</option>
+        <option value="function_hall_A">Function Hall A</option>
+        <option value="gym">Gymnasium</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="residentReservationDate">Date:</label>
+      <input type="date" id="residentReservationDate" name="date" required>
+    </div>
+    <div class="form-group">
+      <label for="residentReservationTime">Time Slot:</label>
+      <select id="residentReservationTime" name="time_slot" required>
+        <option value="">-- Select Time --</option>
+        <!-- Options to be populated based on amenity and date -->
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="residentReservationPurpose">Purpose (optional):</label>
+      <textarea id="residentReservationPurpose" name="purpose" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn-submit-reservation">Request Reservation</button>
+    <div id="newReservationMessage" class="form-message"></div>
+  </form>
+</section>

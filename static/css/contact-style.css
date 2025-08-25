@@ -1,0 +1,254 @@
+/* Contact Page Styles - moved from contact.html */
+.contact-container {
+  max-width: 950px;
+  margin: 5em auto 3em auto;
+  background: linear-gradient(135deg, #f7fafc 0%, #e2e8f0 100%); /* replaced blue with soft gray gradient */
+  border-radius: 2.5em;
+  box-shadow: 0 10px 40px rgba(52, 120, 120, 0.13);
+  padding: 3em 3em 2.5em 3em;
+  color: #18434a;
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+}
+.contact-container::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, #a7f3d0 0%, #fef9c3 100%); /* replaced blue/green with mint to yellow */
+  opacity: 0.13;
+  border-radius: 50%;
+  z-index: 0;
+}
+.contact-container h1 {
+  font-size: 2.6em;
+  margin-bottom: 0.7em;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #178ca4; /* you may want to change this too if you want less blue */
+  z-index: 1;
+  position: relative;
+}
+.contact-container p {
+  margin-bottom: 1.5em;
+  font-size: 1.18em;
+  z-index: 1;
+  position: relative;
+}
+.contact-info {
+  margin-bottom: 2em;
+  background: rgba(255,255,255,0.92);
+  border-radius: 1.3em;
+  padding: 1.5em 2em;
+  box-shadow: 0 2px 12px rgba(52,211,153,0.09);
+  z-index: 1;
+  position: relative;
+}
+.contact-info p {
+  margin: 0.7em 0;
+  font-size: 1.13em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+.contact-info strong {
+  display: inline;
+  width: auto;
+  color: #178ca4;
+  font-weight: 600;
+  margin-right: 0.5em;
+}
+.footer-spacer {
+  height: 120px;
+  width: 100%;
+  display: block;
+}
+.office-slideshow {
+  margin: 2.5em auto 0 auto;
+  max-width: 600px;
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,0.85);
+  border-radius: 1.5em;
+  box-shadow: 0 2px 12px rgba(52,211,153,0.07);
+  padding: 1.5em 1em 2.5em 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.7s cubic-bezier(.23,1.02,.67,1.01), box-shadow 0.4s;
+  will-change: transform;
+}
+.office-slideshow.slide-in {
+  transform: translateY(60px);
+  opacity: 0;
+}
+.office-slideshow.slide-in.visible {
+  transform: translateY(0);
+  opacity: 1;
+  box-shadow: 0 8px 32px rgba(52,211,153,0.13);
+}
+.slideshow-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 1em;
+  background: #e0f2fe;
+  margin-bottom: 1em;
+}
+.slide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1em;
+  position: absolute;
+  top: 0; left: 0;
+  transition: opacity 0.5s;
+  opacity: 0;
+}
+.slide.active {
+  display: block;
+  opacity: 1;
+  position: relative;
+  z-index: 2;
+}
+.slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(24,67,74,0.7);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 1.6em;
+  cursor: pointer;
+  z-index: 3;
+  transition: background 0.2s;
+}
+.slide-btn:hover {
+  background: #34d399;
+  color: #18434a;
+}
+.slide-btn.prev { left: 12px; }
+.slide-btn.next { right: 12px; }
+.slide-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.7em;
+  margin-top: 0.5em;
+}
+.dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #b6d6e8;
+  border: 2px solid #34d399;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+}
+.dot.active {
+  background: #34d399;
+  border: 2px solid #178ca4;
+}
+.office-gallery-section {
+  max-width: 1100px;
+  margin: 3em auto 0 auto;
+  padding: 0 1em 2em 1em;
+  text-align: center;
+}
+.office-gallery-title {
+  font-size: 2em;
+  color: #2563eb;
+  margin-bottom: 1.5em;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.office-gallery-cards {
+  display: flex;
+  justify-content: center;
+  gap: 2.5em;
+  flex-wrap: wrap;
+}
+.office-gallery-card {
+  background: linear-gradient(135deg, #e0e6f7 0%, #b3c6e8 100%);
+  border-radius: 1.5em;
+  box-shadow: 0 4px 24px rgba(52, 120, 200, 0.10);
+  overflow: hidden;
+  width: 320px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(80px);
+  transition: transform 0.7s cubic-bezier(.23,1.02,.67,1.01), opacity 0.7s;
+  will-change: transform, opacity;
+}
+.office-gallery-card.show-gallery {
+  opacity: 1;
+  transform: translateY(0);
+}
+.office-gallery-card.hide-gallery {
+  opacity: 0;
+  transform: translateY(80px);
+}
+.office-gallery-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 1.5em 1.5em 0 0;
+}
+.office-gallery-caption {
+  padding: 1em 0.5em 1.2em 0.5em;
+  font-size: 1.13em;
+  color: #18434a;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+@media (max-width: 900px) {
+  .contact-container {
+    padding: 2em 0.7em;
+    border-radius: 1.3em;
+    min-height: 400px;
+  }
+  .contact-info {
+    padding: 1em 0.7em;
+  }
+}
+@media (max-width: 700px) {
+  .office-slideshow {
+    max-width: 98vw;
+    padding: 1em 0.2em 2em 0.2em;
+  }
+  .slideshow-wrapper {
+    max-width: 98vw;
+    height: 180px;
+  }
+  .office-gallery-section {
+    padding: 0 0.2em 2em 0.2em;
+  }
+  .office-gallery-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+  .office-gallery-card {
+    width: 98vw;
+    min-height: 220px;
+  }
+  .office-gallery-card img {
+    height: 140px;
+  }
+}
+
+/* Update contact numbers */
+/* Example HTML for reference (not in CSS):
+<p><strong>Office Landline:</strong> 86282665 <strong>Mobile No.:</strong> 09955315222</p>
+*/

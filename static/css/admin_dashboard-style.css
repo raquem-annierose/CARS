@@ -1,18 +1,213 @@
+/* HEADER */
+
+.header-container {
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  height: 66px; 
+  width: calc(100% - 240px); /* Default width when sidebar is expanded */
+  box-sizing: border-box;
+  position: fixed;
+  left: 240px; /* Default left when sidebar is expanded */
+  top: 0;  
+  z-index: 1000;
+  transition: width 0.3s ease, left 0.3s ease; 
+}
+
+.header-logo-placeholder {
+  /* DEFAULT STATE: Sidebar is OPEN (expanded), so header logo should be HIDDEN */
+  display: none; /* Hidden by default */
+  opacity: 0;    /* Start with opacity 0 for transition */
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #61dafb; 
+  margin-left: 15px; 
+  transition: opacity 0.3s ease; 
+  cursor: pointer;
+}
+
+.header-spacer { /* Bagong class para sa dating inline style="flex:1;" */
+  flex: 1;
+}
+
+.profile-toggle-container {
+  display: flex;
+  align-items: center;
+  background: #f3f6fa;
+  border-radius: 22px;
+  box-shadow: 0 2px 8px rgba(30,60,114,0.07);
+  padding: 6px 18px 6px 16px;
+  margin-right: 18px;
+  margin-left: auto;
+  min-width: 0;
+  max-width: 340px;
+  transition: box-shadow 0.18s;
+}
+.profile-toggle-container:hover, .profile-toggle-container:focus-within {
+  box-shadow: 0 4px 16px rgba(30,60,114,0.13);
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 0;
+  position: relative;
+  top: -3px; /* Moves the section further upward */
+  cursor: pointer;
+  max-width: 240px; /* Increased max-width */
+  min-width: 160px; /* Added min-width for responsiveness */
+  padding-right: 12px; /* Increased padding for better spacing */
+  margin-left: 0; /* Pushes the profile section to the far right */
+}
+.profile-avatar {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e9f1fb;
+  box-shadow: 0 2px 8px rgba(30,60,114,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile-username {
+  font-weight: 700;
+  color: #6d1616;
+  font-size: 1.25rem; /* Increased font size for better visibility */
+  margin: 10px 0 2px 8px; /* Adjusted margin for better spacing */
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(20,32,48,0.18);
+  display: none; /* Hide username by default */
+  transition: opacity 0.2s;
+  opacity: 0;
+}
+.profile-section.show-username .profile-username {
+  display: block;
+  opacity: 1;
+  animation: fadeInUsername 0.3s;
+}
+@keyframes fadeInUsername {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.profile-section[title]:not(.show-username)::after {
+  content: none;
+}
+
+.profile-dropdown-arrow {
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s;
+  font-size: 1.45em; /* Increased font size for better visibility */
+  margin-left: 8px; /* Adjusted margin for better spacing */
+}
+.profile-dropdown-arrow-icon { /* Styles para sa dating inline styled span */
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 1.45em;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.profile-section.show-dropdown .profile-dropdown-arrow {
+  transform: rotate(180deg);
+}
+.profile-dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(30,60,114,0.13);
+  border-radius: 8px;
+  min-width: 170px; /* Increased min-width for better usability */
+  z-index: 1200;
+  padding: 8px 0;
+  font-size: 1.08rem; /* Increased font size for better visibility */
+}
+.profile-section.show-dropdown .profile-dropdown-menu {
+  display: block;
+}
+.profile-dropdown-menu a {
+  display: block;
+  padding: 10px 18px;
+  color: #1e2a38;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-weight: 500;
+}
+.profile-dropdown-menu a:hover {
+  background: #e9f1fb;
+  color: #4F8EF7;
+}
+
 /* SIDEBAR */
 .sidebar {
-  width: 240px;
+  width: 240px; /* Default expanded width */
   background: #142030;
   color: #e0e6f0;
-  height: 100vh;
+  height: 100vh; 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  position: fixed;
+  justify-content: flex-start;
+  position: fixed; 
   left: 0;
-  top: 0;
-  padding: 30px 20px;
+  top: 0; 
+  padding-top: 20px; /* Adjusted padding */
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  box-sizing: border-box; 
   box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+  overflow-y: auto;
+  z-index: 1100;
+  transition: width 0.3s ease; 
 }
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px; /* Space below header */
+}
+
+.sidebar-toggle-btn {
+  background: none;
+  border: none;
+  color: #e0e6f0;
+  cursor: pointer;
+  padding: 5px;
+  display: flex; /* For centering SVG if needed */
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-toggle-btn svg {
+  transform: rotate(180deg); /* Optional: flip icon when collapsed */
+}
+
 
 .sidebar-top {
   flex-grow: 1;
@@ -25,52 +220,572 @@
   font-size: 1.8rem;
   font-weight: 700;
   letter-spacing: 2px;
-  margin-bottom: 40px;
   color: #61dafb;
+  transition: opacity 0.3s ease, font-size 0.3s ease, height 0.3s ease, margin-bottom 0.3s ease, visibility 0.3s ease;
+  white-space: nowrap; 
+  overflow: hidden; 
+  opacity: 1; /* Visible by default */
+  height: auto; 
+  margin-bottom: 0; 
+  visibility: visible; 
+  cursor: pointer;
+}
+
+.admin-welcome-message {
+  color: #e0e6f0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 25px; 
+  padding: 8px 10px;
+  text-align: left;
+  line-height: 1.4;
+  border-left: 3px solid #61dafb;
+  background-color: rgba(97, 218, 251, 0.05);
+  border-radius: 0 4px 4px 0;
+  overflow: hidden; /* Hide text when collapsing */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: opacity 0.3s ease, padding 0.3s ease, height 0.3s ease, margin-bottom 0.3s ease;
 }
 
 .menu {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px; 
 }
 
 .menu-item {
   color: #e0e6f0;
   text-decoration: none;
   font-weight: 500;
-  padding: 10px 0;
-  transition: color 0.3s ease;
+  padding: 10px 15px; 
+  border-radius: 6px; 
+  transition: color 0.3s ease, background-color 0.3s ease; 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; /* Increased gap for icon and text */
+  overflow: hidden; /* To hide text when collapsing */
 }
 
-.menu-item:hover {
-  color: #61dafb;
+.menu-icon {
+  display: inline-flex; /* Use flex for better alignment of content within icon span */
+  align-items: center;
+  justify-content: center;
+  width: 24px; /* Fixed width for icon area */
+  height: 24px; /* Fixed height for icon area */
+  font-weight: bold;
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+.menu-icon svg { /* Ensure SVGs inside menu-icon behave well */
+  width: 100%;
+  height: 100%;
+}
+
+.menu-text {
+  white-space: nowrap; /* Prevent text from wrapping */
+  opacity: 1;
+  transition: opacity 0.2s ease 0.1s; /* Delay opacity transition for text */
+}
+
+
+/* Hover for non-active, non-logout items */
+.menu-item:hover:not(.active):not(.logout) {
+  color: #61dafb; /* Keeps original hover text color */
+  background-color: rgba(97, 218, 251, 0.08); /* Subtle background tint on hover */
 }
 
 .menu-item.active {
-  color: #61dafb;
-  font-weight: 600;
+  color: #142030; /* Text color for active item (dark for contrast) */
+  background-color: #61dafb; /* Background color for active item */
+  font-weight: 600; /* Keeps original active font-weight */
+}
+
+/* Hover for active items */
+.menu-item.active:hover {
+  background-color: #50c7e8; /* Slightly darker shade of active background on hover */
+  color: #142030; /* Keep text color for active item */
 }
 
 .menu-item.logout {
   margin-top: 20px;
   color: #ff6b6b;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  /* gap: 8px; */ /* Handled by general .menu-item gap */
 }
 
-.menu-item.logout:hover {
-  color: #ff8787;
+/* Styles for COLLAPSED sidebar */
+.sidebar.collapsed {
+  width: 70px; /* Collapsed width */
+  padding-left: 10px; 
+  padding-right: 10px;
 }
 
+.sidebar.collapsed .logo { /* Sidebar logo when sidebar is collapsed - HIDE THIS */
+  opacity: 0; 
+  font-size: 0; 
+  height: 0; 
+  margin-bottom: 0; 
+  overflow: hidden;
+  visibility: hidden;
+  /* No !important needed if specificity is correct */
+}
 
 /* MAIN PANEL */
-.dashboard-container {
-  display: flex;
-}
+/* .admin-container is the overall flex container if you have one, but not strictly necessary for this part */
 
 .main-content {
-  margin-left: 240px;
-  padding: 40px;
-  flex-grow: 1;
+  margin-left: 240px; /* Default margin when sidebar is expanded */
+  padding-top: 76px; 
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  flex-grow: 1; /* If inside a flex container */
+  width: calc(100% - 240px); /* Default width when sidebar is expanded */
+  box-sizing: border-box;
+  transition: width 0.3s ease, margin-left 0.3s ease; 
 }
+
+/* Adjustments when sidebar is collapsed */
+/* These rules are CRUCIAL and must correctly target header and main-content */
+
+body.sidebar-collapsed .header-container { 
+  width: calc(100% - 70px); /* Adjust width for collapsed sidebar */
+  left: 70px;                /* Adjust left position for collapsed sidebar */
+}
+
+/* THIS IS THE CRUCIAL RULE FOR SHOWING THE HEADER LOGO */
+body.sidebar-collapsed .header-logo-placeholder {
+  display: block; /* Show it */
+  opacity: 1;     /* Make it fully visible */
+}
+
+/* 
+  If the .header-logo-placeholder is still visible when the sidebar is expanded,
+  it means the default "display: none;" is being overridden.
+  The "body:not(.sidebar-collapsed)" rule is a more specific way to hide it.
+*/
+body:not(.sidebar-collapsed) .header-logo-placeholder {
+  display: none;
+  opacity: 0;
+}
+
+
+body.sidebar-collapsed .main-content { 
+  width: calc(100% - 70px);   /* Adjust width for collapsed sidebar */
+  margin-left: 70px;          /* Adjust margin for collapsed sidebar */
+}
+
+
+/* Para sa bawat panel section */
+.panel-section {
+  background-color: #fff; 
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 20px; 
+  display: none; /* Itago by default, JS ang magpapakita */
+}
+
+/* Styling para sa content sa loob ng panel-section */
+.panel-section h2 {
+  /* Ang H2 na ito ay para sa internal title ng panel, 
+     na kukunin din ng JS para sa #main-title.
+     Kung gusto mong iba ang itsura ng #main-title vs H2 sa loob ng panel,
+     pwede kang gumamit ng ibang selector or class. */
+  font-size: 1.8rem; /* Sample size, adjust as needed */
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.panel-section ul {
+  list-style: none; /* Remove default bullets for the main UL */
+  padding-left: 0; /* Remove default padding */
+}
+
+.panel-section > ul > li {
+  margin-bottom: 15px; /* Espasyo sa pagitan ng main list items */
+  font-size: 1.1rem;
+}
+
+.panel-section > ul > li > b {
+  color: #555; /* Kulay para sa category title */
+}
+
+.panel-section ul ul {
+  list-style: disc; /* Use bullets for nested lists */
+  padding-left: 25px; /* Indent nested lists */
+  margin-top: 8px;
+}
+
+.panel-section ul ul li {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+
+/* Ipakita ang dashboard-section by default */
+#dashboard-section {
+  display: block; 
+}
+
+
+/* DASHBOARD HEADER ROW */
+.dashboard-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e2a38;
+  letter-spacing: 0.5px;
+}
+.dashboard-date {
+  font-size: 1.1rem;
+  color: #6c7a89;
+  font-weight: 500;
+  background: #f3f6fa;
+  padding: 8px 18px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(30,60,114,0.04);
+}
+
+/* DASHBOARD CARDS */
+.dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+.dashboard-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #e9f1fb 100%);
+  color: #1e2a38;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(30,60,114,0.08);
+  padding: 32px 28px 24px 28px;
+  min-width: 220px;
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: transform 0.18s, box-shadow 0.18s;
+  position: relative;
+  overflow: hidden;
+}
+.dashboard-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(30,60,114,0.14);
+}
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 18px;
+  opacity: 0.92;
+}
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+.card-value {
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0;
+}
+
+/* DASHBOARD PIE CHART */
+.dashboard-piechart-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 48px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(30,60,114,0.08);
+  padding: 32px 40px;
+  margin-bottom: 32px;
+  min-width: 340px;
+  min-height: 340px;
+}
+
+#dashboardPieChart {
+  width: 340px;
+  height: 340px;
+  max-width: 100%;
+  background: transparent;
+}
+
+.piechart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 1rem;
+  color: #222b45;
+  font-weight: 500;
+}
+.legend-color {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* DASHBOARD GRAPHS */
+.dashboard-graphs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+.dashboard-graph-card, .dashboard-events-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(30,60,114,0.08);
+  padding: 24px 28px 18px 28px;
+  min-width: 340px;
+  flex: 1 1 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+.graph-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: #1e2a38;
+}
+#reservationsBarChart, #reservationsAmenityChart {
+  width: 420px;
+  height: 260px;
+  max-width: 100%;
+  background: transparent;
+}
+#reservationsBarGraph {
+  width: 520px;
+  height: 260px;
+  max-width: 100%;
+  background: transparent;
+}
+.latest-events-list {
+  width: 100%;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 1rem;
+  color: #1e2a38;
+}
+.event-placeholder {
+  color: #b0b8c9;
+  font-style: italic;
+}
+
+/* Profile Edit Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  overflow: auto;
+  background: rgba(20,32,48,0.32);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  margin: 60px auto;
+  padding: 32px 32px 24px 32px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 370px;
+  box-shadow: 0 8px 32px rgba(30,60,114,0.18);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.close {
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  font-size: 1.7rem;
+  color: #4F8EF7;
+  cursor: pointer;
+  font-weight: 700;
+}
+.modal-avatar-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.modal-avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 8px;
+  border: 2px solid #e9f1fb;
+}
+.modal-upload-btn {
+  background: #e9f1fb;
+  color: #1e2a38;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 16px;
+  font-size: 0.98rem;
+  cursor: pointer;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.modal-upload-btn:hover {
+  background: #4F8EF7;
+  color: #fff;
+}
+.modal-field {
+  width: 100%;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.modal-field label {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #1e2a38;
+}
+.modal-field input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #cfd8e3;
+  font-size: 1rem;
+  outline: none;
+}
+.modal-save-btn {
+  background: #4F8EF7;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+.modal-save-btn:hover {
+  background: #1e2a38;
+}
+.modal-msg {
+  color: #43D9A3;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .modal-content {
+    max-width: 98vw;
+    padding: 18px 4vw 18px 4vw;
+  }
+}
+
+/* Responsive for dashboard pie chart */
+@media (max-width: 900px) {
+  .header-container {
+    width: 100%; 
+    left: 0;
+    /* Ensure no fixed left or width based on sidebar for mobile initially */
+  }
+  .sidebar {
+    transform: translateX(-100%); 
+    /* z-index: 1200; */ /* Ensure it's above content if it overlays */
+    transition: transform 0.3s ease, width 0.3s ease; /* Add transform to transition */
+  }
+  .sidebar.open { /* New class to show sidebar on mobile */
+    transform: translateX(0);
+    width: 240px; 
+  }
+  .sidebar.collapsed { 
+    /* On mobile, if collapsed means hidden, ensure transform is still -100% */
+    transform: translateX(-100%); /* Or width: 70px and transform: translateX(0) if you want icon-only on mobile */
+  }
+
+  .main-content {
+    margin-left: 0; /* Main content takes full width on mobile when sidebar is hidden */
+    width: 100%;
+    padding-top: 76px; /* Still need space for the header */
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  /* Adjustments for when sidebar is explicitly open on mobile (if you implement a mobile toggle) */
+  /* body.sidebar-open-mobile .main-content { */
+    /* margin-left: 240px; */ /* Example if sidebar overlays */
+  /* } */
+  /* body.sidebar-open-mobile .header-container { */
+    /* left: 240px; */
+    /* width: calc(100% - 240px); */
+  /* } */
+
+  /* If sidebar is collapsed to icon-only on mobile and visible */
+  /* body.sidebar-collapsed.mobile-icon-only .main-content {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+  body.sidebar-collapsed.mobile-icon-only .header-container {
+    left: 70px;
+    width: calc(100% - 70px);
+  } */
+
+
+  .dashboard-cards {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .dashboard-card {
+    min-width: 0;
+    width: 100%;
+  }
+  .dashboard-piechart-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 10px;
+    gap: 24px;
+  }
+  #dashboardPieChart {
+    width: 220px;
+    height: 220px;
+  }
+  .dashboard-graphs-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .dashboard-graph-card, .dashboard-events-card {
+    min-width: 0;
+    width: 100%;
+  }
+  #reservationsBarChart, #reservationsAmenityChart, #reservationsBarGraph {
+    width: 100%;
+    height: 220px;
+  }
+}
+

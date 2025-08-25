@@ -1,0 +1,168 @@
+<!-- Contact Us Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact Us - CARS</title>
+  <link rel="stylesheet" href="../static/css/index-style.css" />
+  <link rel="stylesheet" href="../static/css/contact-style.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header-container modern-header">
+    <div class="logo-holder">
+      <a href="/">CARS</a>
+    </div>
+    <nav class="nav-buttons modern-nav">
+      <a href="/" class="header-nav-link nav-curve-link" id="nav-home">Home</a>
+      <a href="/about" class="header-nav-link nav-curve-link" id="nav-about">About Us</a>
+      <a href="/contact" class="header-nav-link nav-curve-link active" id="nav-contact">Contact</a>
+      <form class="header-search-form" action="#" method="get">
+        <input type="text" name="search" placeholder="Search..." class="header-search-input" />
+        <button type="submit" class="header-search-btn">🔍</button>
+      </form>
+      <a href="#" class="btn-login header-auth-btn">Login</a>
+      <a href="#" class="btn-signup header-auth-btn">Sign up</a>
+      <button id="toggle-theme" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+    </nav>
+  </header>
+  <!-- LOGIN MODAL -->
+  <div id="login-modal-overlay" class="modal-overlay"></div>
+  <div id="login-modal" class="modal-login">
+    <div class="modal-content">
+      <button id="close-login-modal" class="close-modal" aria-label="Close login modal">&times;</button>
+      <h2>Login to CARS</h2>
+      <form id="loginForm" autocomplete="off" spellcheck="false" novalidate>
+        <div class="input-group">
+          <input type="text" name="username_or_email" placeholder="Username or Email" required autocomplete="username" />
+        </div>
+        <div class="input-group">
+          <input type="password" id="passwordInput" name="password" placeholder="Password" required autocomplete="current-password" />
+        </div>
+        <div class="input-group checkbox-group">
+          <input type="checkbox" id="showPassword" />
+          <label for="showPassword">Show Password</label>
+        </div>
+        <button type="submit" class="btn-primary">Login</button>
+      </form>
+      <p class="signup-text">
+        Don’t have an account? <a href="#" class="btn-signup">Sign up as Resident</a>
+      </p>
+      <div id="loginMessage" aria-live="polite"></div>
+    </div>
+  </div>
+  <!-- SIGNUP MODAL -->
+  <div id="signup-modal-overlay" class="modal-overlay"></div>
+  <div id="signup-modal" class="modal-signup wide-modal">
+    <div class="modal-content">
+      <button id="close-signup-modal" class="close-modal" aria-label="Close signup modal">&times;</button>
+      <h2>Sign up as Resident</h2>
+      <div class="signup-stepper">
+        <span class="signup-stepper-dot" data-step="1"></span>
+        <span class="signup-stepper-dot" data-step="2"></span>
+        <span class="signup-stepper-dot" data-step="3"></span>
+      </div>
+      <form id="signupForm" autocomplete="off" spellcheck="false" novalidate>
+        <!-- Step 1: Account Info -->
+        <div class="signup-step" data-step="1">
+          <div class="input-group"><input type="text" name="username" placeholder="Username (8 chars)" required /></div>
+          <div class="input-group"><input type="email" name="email" placeholder="Email" required /></div>
+          <div class="input-group">
+            <input type="password" name="password" placeholder="Password" required id="signup-password" />
+            <button type="button" class="password-toggle" tabindex="-1" aria-label="Show/Hide password" data-target="signup-password">
+              <svg class="eye-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path class="eye-open" d="M1 11C3.5 5.5 18.5 5.5 21 11C18.5 16.5 3.5 16.5 1 11Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle class="eye-pupil" cx="11" cy="11" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+            </button>
+          </div>
+          <div class="input-group">
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required id="signup-confirm-password" />
+            <button type="button" class="password-toggle" tabindex="-1" aria-label="Show/Hide password" data-target="signup-confirm-password">
+              <svg class="eye-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path class="eye-open" d="M1 11C3.5 5.5 18.5 5.5 21 11C18.5 16.5 3.5 16.5 1 11Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle class="eye-pupil" cx="11" cy="11" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+            </button>
+          </div>
+          <button type="button" class="btn-primary next-step">Next</button>
+        </div>
+        <!-- Step 2: Personal Info -->
+        <div class="signup-step" data-step="2" style="display:none;">
+          <div class="input-group"><input type="text" name="first_name" placeholder="First Name" required /></div>
+          <div class="input-group"><input type="text" name="last_name" placeholder="Last Name" required /></div>
+          <div class="input-group"><input type="text" name="middle_name" placeholder="Middle Name (optional)" /></div>
+          <div class="step-btns">
+            <button type="button" class="btn-secondary prev-step">Back</button>
+            <button type="button" class="btn-primary next-step">Next</button>
+          </div>
+        </div>
+        <!-- Step 3: Unit Info -->
+        <div class="signup-step" data-step="3" style="display:none;">
+          <div class="input-row">
+            <div class="input-group"><input type="text" name="unit_number" placeholder="Unit Number" required /></div>
+            <div class="input-group"><input type="text" name="building" placeholder="Building" required /></div>
+          </div>
+          <div class="input-group" style="display: flex; gap: 8px; align-items: center;">
+            <select name="country_code" id="country_code" required style="width: 90px; padding: 12px 8px; border-radius: 12px; border: 1px solid #e0e6f0; background: #f3f6fa; color: #222b45; font-size: 1rem; flex-shrink: 0;">
+              <option value="PH" selected>+63</option>
+              <option value="US">+1</option>
+              <option value="SG">+65</option>
+              <option value="MY">+60</option>
+              <option value="ID">+62</option>
+              <option value="TH">+66</option>
+              <!-- Add more countries as needed -->
+            </select>
+            <input type="tel" name="contact_number" class="phone-input" placeholder="Contact Number" required style="flex: 1; padding: 12px 16px; border-radius: 12px; border: 1px solid #e0e6f0; background: #f3f6fa; color: #222b45; font-size: 1rem;" />
+          </div>
+          <div class="step-btns">
+            <button type="button" class="btn-secondary prev-step">Back</button>
+            <button type="submit" class="btn-primary">Sign Up</button>
+          </div>
+        </div>
+      </form>
+      <p class="signup-text">
+        Already have an account? <a href="#" class="btn-login">Login</a>
+      </p>
+      <div id="signupMessage" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="contact-container">
+    <h1>Contact Us</h1>
+    <p>For questions, support, or suggestions, please reach out to your condominium admin team or our contact person below:</p>
+    <div class="contact-info">
+      <p><strong>Contact Person:</strong> Ms. Lorelei Martinez </p>
+      <p><strong>Email:</strong> admin@cars-condo.com</p>
+      <p><strong>Mobile Phone:</strong>09955315222</p>
+      <p><strong>Offcice Landline:</strong> 86282665</p></p>
+      <p><strong>Office:</strong> Lakeview Manors, Brgy. Ususan, Taguig City</p>
+    </div>
+  </div>
+  <section class="office-gallery-section">
+    <h2 class="office-gallery-title">Our Office</h2>
+    <div class="office-gallery-cards">
+      <div class="office-gallery-card animate-on-scroll">
+        <img src="../static/resources/banner/1.jpg" alt="Office 1" />
+        <div class="office-gallery-caption">Reception Area</div>
+      </div>
+      <div class="office-gallery-card animate-on-scroll">
+        <img src="../static/resources/banner/2.jpg" alt="Office 2" />
+        <div class="office-gallery-caption">Conference Room</div>
+      </div>
+      <div class="office-gallery-card animate-on-scroll">
+        <img src="../static/resources/banner/3.jpg" alt="Office 3" />
+        <div class="office-gallery-caption">Building Exterior</div>
+      </div>
+    </div>
+  </section>
+  <div class="footer-spacer"></div>
+  <!-- FOOTER -->
+  <footer class="footer-container">
+    <p>© 2025 CARS. All rights reserved.</p>
+  </footer>
+  <script src="../static/js/theme-toggle.js"></script>
+  <script src="static/js/login-modal.js"></script>
+  <script src="static/js/signup-modal.js"></script>
+  <script src="static/js/office-gallery-animate.js"></script>
+</body>
+</html>

@@ -1,41 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Resident Dashboard</title>
-  <link rel="stylesheet" href="/CARS/static/css/resident_dashboard-style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resident Dashboard - CARS</title>
+  <link rel="stylesheet" href="/static/css/resident_dashboard-style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet" />
 </head>
 <body>
-  <!-- Header -->
-  <header class="header-container">
-    <!-- Empty header (styled via admin_dashboard-style.css) -->
-  </header>
+  <div class="resident-container"> <!-- Changed from admin-container -->
+    <!-- Header -->
+    <header class="header-container">
+      <div class="header-logo-placeholder" onclick="window.location.href='/'" style="cursor:pointer;">CARS</div>
+      <div class="header-spacer"></div>
+      <div class="profile-section" id="profileSection">
+        <div class="profile-username" id="profileUsername">Resident</div>
+        <div class="profile-avatar" id="profileAvatar">
+          <img src="/static/resources/profile/default-avatar.png" alt="Profile Avatar" id="profileAvatarImg" />
+        </div>
+        <span class="profile-dropdown-arrow-icon" id="profileDropdownArrow">&#9662;</span>
+        <div class="profile-dropdown-menu" id="profileDropdownMenu">
+          <a href="#" id="profileMenuProfile" data-panel="resident-profile-settings">Profile</a>
+          <a href="#" id="profileMenuLogout">Logout</a>
+        </div>
+      </div>
+    </header>
 
-  <div class="dashboard-container">
     <!-- Sidebar -->
-    <aside class="sidebar">
-      <div>
-        <div class="logo">MyResidence</div>
+    <aside class="sidebar" id="residentSidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-header">
+          <div class="logo" id="sidebarLogo" onclick="window.location.href='/'" style="cursor:pointer;">CARS</div>
+          <button id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path> <!-- Standard menu icon -->
+            </svg>
+          </button>
+        </div>
+        <div id="residentWelcomeMessage" class="resident-welcome-message">Welcome, Resident!</div>
         <nav class="menu">
-          <a href="#" class="menu-item active">Dashboard</a>
-          <a href="#" class="menu-item">My Reservations</a>
-          <a href="#" class="menu-item">Payments</a>
-          <a href="#" class="menu-item">Profile</a>
+          <a href="#" class="menu-item" data-panel="resident-dashboard" data-text="Dashboard">
+            <span class="menu-icon">D</span>
+            <span class="menu-text">Dashboard</span>
+          </a>
+          <a href="#my_reservations" class="menu-item" data-panel="my_reservations" data-text="My Reservations">
+            <span class="menu-icon">M</span>
+            <span class="menu-text">My Reservations</span>
+          </a>
+          <a href="#new_reservation" class="menu-item" data-panel="new_reservation" data-text="New Reservation">
+            <span class="menu-icon">N</span>
+            <span class="menu-text">New Reservation</span>
+          </a>
+          <a href="#resident_payments" class="menu-item" data-panel="resident_payments" data-text="Payments">
+            <span class="menu-icon">P</span>
+            <span class="menu-text">Payments</span>
+          </a>
+          <a href="#resident-profile-settings" class="menu-item" data-panel="resident-profile-settings" data-text="Profile">
+            <span class="menu-icon">S</span>
+            <span class="menu-text">Profile</span>
+          </a>
         </nav>
       </div>
-      <a href="#" class="menu-item logout">Logout</a>
+      <a href="#" id="logoutBtn" class="menu-item logout" data-text="Logout" onclick="logoutResident(event)"> <!-- Bottom logout -->
+        <span class="menu-icon">
+          <svg class="logout-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </span>
+        <span class="menu-text">Logout</span>
+      </a>
     </aside>
 
     <!-- Main Content Panel -->
     <main class="main-content">
-      <!-- Main content goes here -->
+      
+        {% include 'resident_sidebar/resident_dashboard_content.html' %}
+     
+      
+        {% include 'resident_sidebar/resident_my_reservations.html' %}
+     
+        {% include 'resident_sidebar/resident_new_reservation.html' %}
+     
+        {% include 'resident_sidebar/resident_payments.html' %}
+      
+        {% include 'resident_sidebar/resident_profile_settings.html' %}
+     
+      <!-- Content will be loaded/shown here by JS -->
     </main>
   </div>
 
-  <!-- Footer -->
-  <footer class="footer-container">
-    <!-- Empty footer (styled via admin_dashboard-style.css) -->
-  </footer>
+  <!-- Profile Edit Modal (similar to admin's) -->
+  <div id="profileEditModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" id="closeProfileModal">&times;</span>
+      <h2>Edit Profile</h2>
+      <form id="profileEditForm" autocomplete="off">
+        <div class="modal-avatar-row">
+          <img id="modalProfileAvatarImg" src="/static/resources/profile/default-avatar.png" alt="Profile Avatar" class="modal-avatar-img" />
+          <input type="file" id="modalProfileAvatarInput" accept="image/*" style="display:none;" />
+          <button type="button" class="modal-upload-btn" id="modalChangeAvatarBtn">Change Avatar</button>
+        </div>
+        <div id="cropperContainer" style="display:none;text-align:center;margin-bottom:12px;">
+          <img id="cropperImage" style="max-width:100%;max-height:250px;display:block;margin:0 auto;" />
+          <button type="button" id="cropImageBtn" class="modal-save-btn" style="margin-top:10px; width: auto; padding: 8px 16px;">Crop & Use</button>
+        </div>
+        <input type="hidden" id="croppedAvatarData" name="cropped_avatar" />
+        <div class="modal-field">
+          <label for="modalProfileUsername">Username</label>
+          <input type="text" id="modalProfileUsername" name="username" required />
+        </div>
+        <div class="modal-field">
+          <label for="modalContactNumber">Contact Number</label>
+          <input type="tel" id="modalContactNumber" name="contact_number" placeholder="e.g., +639123456789" />
+        </div>
+        <!-- Add other editable fields for resident if necessary -->
+        <!-- Example:
+        <div class="modal-field">
+          <label for="modalFirstName">First Name</label>
+          <input type="text" id="modalFirstName" name="first_name" />
+        </div>
+        <div class="modal-field">
+          <label for="modalLastName">Last Name</label>
+          <input type="text" id="modalLastName" name="last_name" />
+        </div>
+        -->
+        <div id="profileModalMsg" class="modal-msg" style="display:none;"></div>
+        <button type="submit" class="modal-save-btn">Save Changes</button>
+      </form>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
+  <script src="/static/js/profile.js"></script> <!-- Reusing admin's profile.js -->
+  <script src="/static/js/resident_dashboard.js"></script>
 </body>
 </html>
