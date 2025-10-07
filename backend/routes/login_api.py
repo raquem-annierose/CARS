@@ -26,10 +26,15 @@ def login():
             password.encode('utf-8'),
             user['password_hash'].encode('utf-8')
         ):
+            # Set session and ensure Flask treats it as modified so Set-Cookie is sent
             session['user_id'] = user['user_id']
             session['role'] = user['role']
             session['username'] = user['username']
+            session.permanent = True
+            session.modified = True
+            current_app.logger.debug(f"Session after login: {dict(session)}")
 
+            # return a normal JSON response (Flask will attach the session cookie)
             return jsonify({
                 'success': True,
                 'role': user['role']
